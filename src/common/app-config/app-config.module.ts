@@ -33,6 +33,8 @@ import { AppConfigService } from '@common/app-config/app-config.service';
           .valid('fatal', 'error', 'warn', 'info', 'debug', 'trace')
           .default('trace'),
 
+        [ENV_KEY.ALLOW_COOKIE_DOMAIN]: Joi.string().required(),
+
         [ENV_KEY.AWS_S3_REGION]: Joi.string().required(),
         [ENV_KEY.AWS_S3_BUCKET_NAME]: Joi.string().required(),
         [ENV_KEY.AWS_S3_URL]: Joi.string().required(),

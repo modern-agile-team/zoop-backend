@@ -11,6 +11,8 @@ import { SignInInfoNotMatchedError } from '@module/auth/errors/sign-in-info-not-
 import { SignInWithUsernameCommand } from '@module/auth/use-cases/sign-in-with-username/sign-in-with-username.command';
 import { SignInWithUsernameDto } from '@module/auth/use-cases/sign-in-with-username/sign-in-with-username.dto';
 
+import { ENV_KEY } from '@common/app-config/app-config.constant';
+import { AppConfigService } from '@common/app-config/app-config.service';
 import { BaseHttpException } from '@common/base/base-http-exception';
 import { RequestValidationError } from '@common/base/base.error';
 import { ApiErrorResponse } from '@common/decorator/api-fail-response.decorator';
@@ -18,7 +20,16 @@ import { ApiErrorResponse } from '@common/decorator/api-fail-response.decorator'
 @ApiTags('auth')
 @Controller('auth')
 export class SignInWithUsernameController {
-  constructor(private readonly commandBus: CommandBus) {}
+  private readonly ALLOW_COOKIE_DOMAIN: string;
+
+  constructor(
+    private readonly commandBus: CommandBus,
+    private readonly appConfigService: AppConfigService,
+  ) {
+    this.ALLOW_COOKIE_DOMAIN = this.appConfigService.get<string>(
+      ENV_KEY.ALLOW_COOKIE_DOMAIN,
+    );
+  }
 
   /**
    * @todo 프론트엔드에서 작업 완려되면 json 응답 제거
@@ -55,7 +66,12 @@ export class SignInWithUsernameController {
         AuthToken
       >(command);
 
-      res.cookie('access_token', authToken.accessToken, {});
+      res.cookie('access_token', authToken.accessToken, {
+        secure: true,
+        sameSite: 'none',
+        domain: this.ALLOW_COOKIE_DOMAIN,
+        httpOnly: true,
+      });
 
       return AuthTokenDtoAssembler.convertToDto(authToken);
     } catch (error) {

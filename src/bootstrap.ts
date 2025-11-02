@@ -22,7 +22,10 @@ export const createApp = async () => {
 };
 
 export const setCors = (app: INestApplication) => {
-  app.enableCors();
+  app.enableCors({
+    credentials: true,
+    origin: true,
+  });
 };
 
 export const setGlobalPipe = (app: INestApplication) => {
