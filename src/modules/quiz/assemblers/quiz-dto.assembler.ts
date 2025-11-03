@@ -1,11 +1,11 @@
-import { QuizDto } from '@module/quiz/dto/quiz.dto';
+import { QuizAdminDto } from '@module/quiz/dto/quiz.admin-dto';
 import { Quiz } from '@module/quiz/entities/quiz.entity';
 
 import { AssetUrlManager } from '@shared/asset/asset-url.manager';
 
 export class QuizDtoAssembler {
-  static convertToDto(quiz: Quiz): QuizDto {
-    const dto = new QuizDto({
+  static convertToAdminDto(quiz: Quiz): QuizAdminDto {
+    const dto = new QuizAdminDto({
       id: quiz.id,
       createdAt: quiz.createdAt,
       updatedAt: quiz.updatedAt,

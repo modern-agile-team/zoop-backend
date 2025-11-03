@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { BaseResponseDto } from '@common/base/base.dto';
 
-export class QuizDto extends BaseResponseDto {
+export class QuizAdminDto extends BaseResponseDto {
   constructor(props: BaseResponseDto) {
     super(props);
   }

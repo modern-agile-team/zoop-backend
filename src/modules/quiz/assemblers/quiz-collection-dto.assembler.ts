@@ -1,12 +1,12 @@
 import { QuizDtoAssembler } from '@module/quiz/assemblers/quiz-dto.assembler';
-import { QuizCollectionDto } from '@module/quiz/dto/quiz-collection.dto';
+import { QuizCollectionAdminDto } from '@module/quiz/dto/quiz-collection.admin-dto';
 import { Quiz } from '@module/quiz/entities/quiz.entity';
 
 export class QuizCollectionDtoAssembler {
-  static convertToDto(quizzes: Quiz[]): QuizCollectionDto {
-    const dto = new QuizCollectionDto();
+  static convertToAdminDto(quizzes: Quiz[]): QuizCollectionAdminDto {
+    const dto = new QuizCollectionAdminDto();
 
-    dto.data = quizzes.map((quiz) => QuizDtoAssembler.convertToDto(quiz));
+    dto.data = quizzes.map((quiz) => QuizDtoAssembler.convertToAdminDto(quiz));
 
     return dto;
   }

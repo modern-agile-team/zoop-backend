@@ -13,7 +13,7 @@ import { QuizImageDto } from '@module/quiz-image/dto/quiz-image.dto';
 import { QuizImage } from '@module/quiz-image/entities/quiz-image.entity';
 import { QuizImageNotFoundError } from '@module/quiz-image/errors/quiz-image-not-found.error';
 import { GetQuizImageQuery } from '@module/quiz-image/use-cases/get-quiz-image/get-quiz-image.query';
-import { QuizDto } from '@module/quiz/dto/quiz.dto';
+import { QuizAdminDto } from '@module/quiz/dto/quiz.admin-dto';
 
 import { BaseHttpException } from '@common/base/base-http-exception';
 import {
@@ -37,7 +37,7 @@ export class GetQuizImageController {
     [HttpStatus.FORBIDDEN]: [PermissionDeniedError],
     [HttpStatus.NOT_FOUND]: [QuizImageNotFoundError],
   })
-  @ApiOkResponse({ type: QuizDto })
+  @ApiOkResponse({ type: QuizAdminDto })
   @UseGuards(JwtAuthGuard, AdminGuard)
   @Get('admin/quiz-images/:quizImageId')
   async getQuizImage(

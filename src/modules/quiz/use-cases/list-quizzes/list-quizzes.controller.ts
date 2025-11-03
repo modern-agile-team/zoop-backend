@@ -9,7 +9,7 @@ import {
 
 import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 import { QuizCollectionDtoAssembler } from '@module/quiz/assemblers/quiz-collection-dto.assembler';
-import { QuizCollectionDto } from '@module/quiz/dto/quiz-collection.dto';
+import { QuizCollectionAdminDto } from '@module/quiz/dto/quiz-collection.admin-dto';
 import { Quiz } from '@module/quiz/entities/quiz.entity';
 import { ListQuizzesQuery } from '@module/quiz/use-cases/list-quizzes/list-quizzes.query';
 
@@ -33,16 +33,16 @@ export class ListQuizzesController {
     [HttpStatus.UNAUTHORIZED]: [UnauthorizedError],
     [HttpStatus.FORBIDDEN]: [PermissionDeniedError],
   })
-  @ApiOkResponse({ type: QuizCollectionDto })
+  @ApiOkResponse({ type: QuizCollectionAdminDto })
   @UseGuards(JwtAuthGuard, AdminGuard)
   @Get('admin/quizzes')
-  async listQuizzes() {
+  async listQuizzes(): Promise<QuizCollectionAdminDto> {
     const query = new ListQuizzesQuery({});
 
     const quizzes = await this.queryBus.execute<ListQuizzesQuery, Quiz[]>(
       query,
     );
 
-    return QuizCollectionDtoAssembler.convertToDto(quizzes);
+    return QuizCollectionDtoAssembler.convertToAdminDto(quizzes);
   }
 }
