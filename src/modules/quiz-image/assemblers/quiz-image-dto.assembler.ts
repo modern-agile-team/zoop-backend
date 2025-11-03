@@ -14,6 +14,7 @@ export class QuizImageDtoAssembler {
     dto.category = quizImage.category;
     dto.name = quizImage.name;
     dto.originalFileName = quizImage.originalFileName;
+    dto.quizImageFileName = quizImage.fileName;
     dto.quizImageUrl = AssetUrlManager.fileNameToUrl(
       quizImage.fileName,
       'quizImage',
