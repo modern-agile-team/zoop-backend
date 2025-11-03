@@ -9,7 +9,7 @@ import {
 
 import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 import { NicknameSourceDtoAssembler } from '@module/nickname-source/assemblers/nickname-source-dto.assembler';
-import { NicknameSourceDto } from '@module/nickname-source/dto/nickname-source.dto';
+import { NicknameSourceAdminDto } from '@module/nickname-source/dto/nickname-source.admin-dto';
 import { NicknameSource } from '@module/nickname-source/entities/nickname-source.entity';
 import { NicknameSourceNotFoundError } from '@module/nickname-source/errors/nickname-source-not-found.error';
 import { GetNicknameSourceQuery } from '@module/nickname-source/use-cases/get-nickname-source/get-nickname-source.query';
@@ -36,12 +36,12 @@ export class GetNicknameSourceController {
     [HttpStatus.FORBIDDEN]: [PermissionDeniedError],
     [HttpStatus.NOT_FOUND]: [NicknameSourceNotFoundError],
   })
-  @ApiOkResponse({ type: NicknameSourceDto })
+  @ApiOkResponse({ type: NicknameSourceAdminDto })
   @UseGuards(JwtAuthGuard, AdminGuard)
   @Get('admin/nickname-sources/:nicknameSourceId')
   async getNicknameSourceAdmin(
     @Param('nicknameSourceId') nicknameSourceId: string,
-  ): Promise<NicknameSourceDto> {
+  ): Promise<NicknameSourceAdminDto> {
     try {
       const query = new GetNicknameSourceQuery({ nicknameSourceId });
 
@@ -50,7 +50,7 @@ export class GetNicknameSourceController {
         NicknameSource
       >(query);
 
-      return NicknameSourceDtoAssembler.convertToDto(nicknameSource);
+      return NicknameSourceDtoAssembler.convertToAdminDto(nicknameSource);
     } catch (error) {
       if (error instanceof NicknameSourceNotFoundError) {
         throw new BaseHttpException(HttpStatus.NOT_FOUND, error);

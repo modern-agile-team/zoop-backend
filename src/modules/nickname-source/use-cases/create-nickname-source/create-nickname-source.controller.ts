@@ -9,11 +9,11 @@ import {
 
 import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 import { NicknameSourceDtoAssembler } from '@module/nickname-source/assemblers/nickname-source-dto.assembler';
-import { NicknameSourceDto } from '@module/nickname-source/dto/nickname-source.dto';
+import { NicknameSourceAdminDto } from '@module/nickname-source/dto/nickname-source.admin-dto';
 import { NicknameSource } from '@module/nickname-source/entities/nickname-source.entity';
 import { NicknameSourceAlreadyExistsError } from '@module/nickname-source/errors/nickname-source-already-exists.error';
+import { CreateNicknameSourceAdminDto } from '@module/nickname-source/use-cases/create-nickname-source/create-nickname-source.admin-dto';
 import { CreateNicknameSourceCommand } from '@module/nickname-source/use-cases/create-nickname-source/create-nickname-source.command';
-import { CreateNicknameSourceDto } from '@module/nickname-source/use-cases/create-nickname-source/create-nickname-source.dto';
 
 import { BaseHttpException } from '@common/base/base-http-exception';
 import {
@@ -37,12 +37,12 @@ export class CreateNicknameSourceController {
     [HttpStatus.FORBIDDEN]: [PermissionDeniedError],
     [HttpStatus.CONFLICT]: [NicknameSourceAlreadyExistsError],
   })
-  @ApiCreatedResponse({ type: NicknameSourceDto })
+  @ApiCreatedResponse({ type: NicknameSourceAdminDto })
   @UseGuards(JwtAuthGuard, AdminGuard)
   @Post('admin/nickname-sources')
   async createNicknameSourceAdmin(
-    @Body() body: CreateNicknameSourceDto,
-  ): Promise<NicknameSourceDto> {
+    @Body() body: CreateNicknameSourceAdminDto,
+  ): Promise<NicknameSourceAdminDto> {
     try {
       const command = new CreateNicknameSourceCommand({
         name: body.name,
@@ -53,7 +53,7 @@ export class CreateNicknameSourceController {
         NicknameSource
       >(command);
 
-      return NicknameSourceDtoAssembler.convertToDto(nicknameSource);
+      return NicknameSourceDtoAssembler.convertToAdminDto(nicknameSource);
     } catch (error) {
       if (error instanceof NicknameSourceAlreadyExistsError) {
         throw new BaseHttpException(HttpStatus.CONFLICT, error);

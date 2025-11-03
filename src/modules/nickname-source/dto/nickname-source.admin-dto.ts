@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { BaseResponseDto } from '@common/base/base.dto';
 
-export class NicknameSourceDto extends BaseResponseDto {
+export class NicknameSourceAdminDto extends BaseResponseDto {
   @ApiProperty()
   name: string;
 

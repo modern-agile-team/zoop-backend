@@ -9,9 +9,9 @@ import {
 
 import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 import { NicknameSourceCollectionDtoAssembler } from '@module/nickname-source/assemblers/nickname-source-dto-collection.assembler';
-import { NicknameSourceCollectionDto } from '@module/nickname-source/dto/nickname-source-collection.dto';
+import { NicknameSourceCollectionAdminDto } from '@module/nickname-source/dto/nickname-source-collection.admin-dto';
 import { NicknameSource } from '@module/nickname-source/entities/nickname-source.entity';
-import { ListNicknameSourcesDto } from '@module/nickname-source/use-cases/list-nickname-sources/list-nickname-sources.dto';
+import { ListNicknameSourcesAdminDto } from '@module/nickname-source/use-cases/list-nickname-sources/list-nickname-sources.admin-dto';
 import { ListNicknameSourcesQuery } from '@module/nickname-source/use-cases/list-nickname-sources/list-nickname-sources.query';
 
 import { OffsetPage } from '@common/base/base.entity';
@@ -35,10 +35,12 @@ export class ListNicknameSourcesController {
     [HttpStatus.UNAUTHORIZED]: [UnauthorizedError],
     [HttpStatus.FORBIDDEN]: [PermissionDeniedError],
   })
-  @ApiOkResponse({ type: NicknameSourceCollectionDto })
+  @ApiOkResponse({ type: NicknameSourceCollectionAdminDto })
   @UseGuards(JwtAuthGuard, AdminGuard)
   @Get('admin/nickname-sources')
-  async listNicknameSources(@Query() dto: ListNicknameSourcesDto) {
+  async listNicknameSources(
+    @Query() dto: ListNicknameSourcesAdminDto,
+  ): Promise<NicknameSourceCollectionAdminDto> {
     const query = new ListNicknameSourcesQuery({
       page: dto.page,
       perPage: dto.perPage,
@@ -49,6 +51,6 @@ export class ListNicknameSourcesController {
       OffsetPage<NicknameSource>
     >(query);
 
-    return NicknameSourceCollectionDtoAssembler.convertToDto(offsetPage);
+    return NicknameSourceCollectionDtoAssembler.convertToAdminDto(offsetPage);
   }
 }
