@@ -23,7 +23,7 @@ const ALLOW_SORT_FIELDS: ReadonlySet<AllowSortFields> = new Set([
   'category',
 ]);
 
-export class ListQuizImagesDto {
+export class ListQuizImagesAdminDto {
   @ApiProperty({
     description: '카테고리 필터링',
     required: false,

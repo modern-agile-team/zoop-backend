@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { IsFile, MaxFileSize, MemoryStoredFile } from 'nestjs-form-data';
 
-export class CreateQuizImageDto {
+export class CreateQuizImageAdminDto {
   @ApiProperty({
     description: 'quiz image file',
     required: true,

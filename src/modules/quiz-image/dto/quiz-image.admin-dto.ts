@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { BaseResponseDto } from '@common/base/base.dto';
 
-export class QuizImageDto extends BaseResponseDto {
+export class QuizImageAdminDto extends BaseResponseDto {
   @ApiProperty()
   category: string;
 

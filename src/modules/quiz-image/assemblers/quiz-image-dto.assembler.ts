@@ -1,11 +1,11 @@
-import { QuizImageDto } from '@module/quiz-image/dto/quiz-image.dto';
+import { QuizImageAdminDto } from '@module/quiz-image/dto/quiz-image.admin-dto';
 import { QuizImage } from '@module/quiz-image/entities/quiz-image.entity';
 
 import { AssetUrlManager } from '@shared/asset/asset-url.manager';
 
 export class QuizImageDtoAssembler {
-  static convertToDto(quizImage: QuizImage): QuizImageDto {
-    const dto = new QuizImageDto({
+  static convertToAdminDto(quizImage: QuizImage): QuizImageAdminDto {
+    const dto = new QuizImageAdminDto({
       id: quizImage.id,
       createdAt: quizImage.createdAt,
       updatedAt: quizImage.updatedAt,

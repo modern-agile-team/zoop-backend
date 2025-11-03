@@ -13,10 +13,10 @@ import { FormDataRequest } from 'nestjs-form-data';
 
 import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 import { QuizImageDtoAssembler } from '@module/quiz-image/assemblers/quiz-image-dto.assembler';
-import { QuizImageDto } from '@module/quiz-image/dto/quiz-image.dto';
+import { QuizImageAdminDto } from '@module/quiz-image/dto/quiz-image.admin-dto';
 import { QuizImage } from '@module/quiz-image/entities/quiz-image.entity';
+import { CreateQuizImageAdminDto } from '@module/quiz-image/use-cases/create-quiz-image/create-quiz-image.admin-dto';
 import { CreateQuizImageCommand } from '@module/quiz-image/use-cases/create-quiz-image/create-quiz-image.command';
-import { CreateQuizImageDto } from '@module/quiz-image/use-cases/create-quiz-image/create-quiz-image.dto';
 
 import {
   PermissionDeniedError,
@@ -42,11 +42,13 @@ export class CreateQuizImageController {
     [HttpStatus.UNAUTHORIZED]: [UnauthorizedError],
     [HttpStatus.FORBIDDEN]: [PermissionDeniedError],
   })
-  @ApiCreatedResponse({ type: QuizImageDto })
+  @ApiCreatedResponse({ type: QuizImageAdminDto })
   @UseGuards(JwtAuthGuard, AdminGuard)
   @FormDataRequest()
   @Post('admin/quiz-images')
-  async createQuizImageAdmin(@Body() dto: CreateQuizImageDto) {
+  async createQuizImageAdmin(
+    @Body() dto: CreateQuizImageAdminDto,
+  ): Promise<QuizImageAdminDto> {
     const quizImageDimensions = imageSize(dto.file.buffer);
 
     const command = new CreateQuizImageCommand({
@@ -67,6 +69,6 @@ export class CreateQuizImageController {
       QuizImage
     >(command);
 
-    return QuizImageDtoAssembler.convertToDto(quizImage);
+    return QuizImageDtoAssembler.convertToAdminDto(quizImage);
   }
 }
