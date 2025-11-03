@@ -14,6 +14,7 @@ export class QuizDtoAssembler {
     dto.type = quiz.type;
     dto.question = quiz.question ?? null;
     dto.answer = quiz.answer;
+    dto.imageFileName = quiz.imageFileName ?? null;
     dto.imageUrl =
       quiz.imageFileName === null || quiz.imageFileName === undefined
         ? null
