@@ -24,6 +24,7 @@ import { ApiErrorResponse } from '@common/decorator/api-fail-response.decorator'
 export class SignInWithGoogleController {
   private readonly ALLOW_REDIRECT_URLS: string[];
   private readonly DEFAULT_REDIRECT_URL: string;
+  private readonly ALLOW_COOKIE_DOMAIN: string;
 
   constructor(
     private readonly commandBus: CommandBus,
@@ -35,6 +36,9 @@ export class SignInWithGoogleController {
 
     this.DEFAULT_REDIRECT_URL = this.appConfigService.get<string>(
       ENV_KEY.OAUTH_DEFAULT_REDIRECT_URL,
+    );
+    this.ALLOW_COOKIE_DOMAIN = this.appConfigService.get<string>(
+      ENV_KEY.ALLOW_COOKIE_DOMAIN,
     );
   }
 
@@ -80,7 +84,12 @@ export class SignInWithGoogleController {
       AuthToken
     >(command);
 
-    res.cookie('access_token', authToken.accessToken, {});
+    res.cookie('access_token', authToken.accessToken, {
+      secure: true,
+      sameSite: 'none',
+      domain: this.ALLOW_COOKIE_DOMAIN,
+      httpOnly: true,
+    });
 
     const state = JSON.parse(req.query.state);
 

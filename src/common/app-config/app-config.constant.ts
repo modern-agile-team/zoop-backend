@@ -22,6 +22,10 @@ const LOGGER = {
   LOGGER_LEVEL: 'LOGGER_LEVEL',
 } as const;
 
+const COOKIE = {
+  ALLOW_COOKIE_DOMAIN: 'ALLOW_COOKIE_DOMAIN',
+} as const;
+
 const AWS_S3 = {
   AWS_S3_REGION: 'AWS_S3_REGION',
   AWS_S3_BUCKET_NAME: 'AWS_S3_BUCKET_NAME',
@@ -49,6 +53,7 @@ export const ENV_KEY = {
   ...REDIS,
   ...JWT,
   ...LOGGER,
+  ...COOKIE,
   ...AWS_S3,
   ...OAUTH,
   ...GOOGLE_OAUTH,
