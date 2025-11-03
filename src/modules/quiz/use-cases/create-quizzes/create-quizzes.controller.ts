@@ -30,8 +30,6 @@ import {
 import { ApiErrorResponse } from '@common/decorator/api-fail-response.decorator';
 import { AdminGuard } from '@common/guards/admin.guard';
 
-import { AssetUrlManager } from '@shared/asset/asset-url.manager';
-
 @ApiTags('quiz')
 @Controller()
 export class CreateQuizzesController {
@@ -55,21 +53,12 @@ export class CreateQuizzesController {
     @Body(new ParseArrayPipe({ items: CreateQuizzesDto }))
     dtos: CreateQuizzesDto[],
   ): Promise<QuizDto[]> {
-    const filteredDtos = dtos.filter(
-      (item): item is CreateQuizzesDto & { imageUrl: string } =>
-        item.imageUrl !== null &&
-        AssetUrlManager.isValidUrl(item.imageUrl, 'quizImage'),
-    );
-
     const command = new CreateQuizzesCommand(
-      filteredDtos.map((item) => ({
-        type: item.type,
-        answer: item.answer,
-        question: item.question,
-        imageFileName: AssetUrlManager.urlToFileName(
-          item.imageUrl,
-          'quizImage',
-        ),
+      dtos.map((dto) => ({
+        type: dto.type,
+        answer: dto.answer,
+        question: dto.question,
+        imageFileName: dto.imageFileName,
       })),
     );
 
