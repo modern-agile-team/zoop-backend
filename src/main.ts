@@ -1,6 +1,7 @@
 import { AsyncApiDocConfig } from 'src/async-api-doc';
 import {
   createApp,
+  setCookie,
   setCors,
   setGlobalExceptionFilter,
   setGlobalInterceptor,
@@ -13,6 +14,7 @@ import { SwaggerConfig } from 'src/swagger';
 async function bootstrap() {
   const app = await createApp();
 
+  setCookie(app);
   setCors(app);
   setGlobalPipe(app);
   setLogger(app);

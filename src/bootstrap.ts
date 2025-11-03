@@ -8,6 +8,8 @@ import {
 } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
 
+import cookieParser from 'cookie-parser';
+
 import { AppModule } from 'src/app.module';
 
 import { BaseHttpExceptionFilter } from '@common/base/base-http-exception.filter';
@@ -19,6 +21,10 @@ import { RedisIoAdapter } from '@core/socket/redis-io.adapter';
 
 export const createApp = async () => {
   return await NestFactory.create(AppModule, { bufferLogs: true });
+};
+
+export const setCookie = (app: INestApplication) => {
+  app.use(cookieParser());
 };
 
 export const setCors = (app: INestApplication) => {
