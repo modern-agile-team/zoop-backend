@@ -29,6 +29,13 @@ export class QuizDto extends BaseResponseDto {
 
   @ApiProperty({
     type: String,
+    description: '퀴즈 이미지 파일명',
+    nullable: true,
+  })
+  imageFileName: string | null;
+
+  @ApiProperty({
+    type: String,
     description: '퀴즈 이미지 URL',
     nullable: true,
     example: 'https://example.com/quiz.png',

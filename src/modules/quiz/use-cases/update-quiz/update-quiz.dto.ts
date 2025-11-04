@@ -29,5 +29,5 @@ export class UpdateQuizDto {
   })
   @IsString()
   @IsOptional()
-  imageUrl?: string | null;
+  imageFileName?: string | null;
 }

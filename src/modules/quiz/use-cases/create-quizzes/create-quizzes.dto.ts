@@ -27,5 +27,5 @@ export class CreateQuizzesDto {
   })
   @IsString()
   @IsNullable()
-  imageUrl: string | null;
+  imageFileName: string | null;
 }
