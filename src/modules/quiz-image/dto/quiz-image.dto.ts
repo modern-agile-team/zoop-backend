@@ -13,6 +13,9 @@ export class QuizImageDto extends BaseResponseDto {
   originalFileName: string;
 
   @ApiProperty()
+  quizImageFileName: string;
+
+  @ApiProperty()
   quizImageUrl: string;
 
   @ApiProperty()
