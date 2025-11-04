@@ -4,6 +4,9 @@ networks:
   backend_net:
     name: quizzes_game_io_backend_default
     driver: bridge
+  obs_net:
+    name: quizzes_game_io_obs
+    driver: bridge
 
 services:
   quizzes_game_io_backend_postgres:
@@ -25,16 +28,99 @@ services:
 
   quizzes_game_io_backend_redis:
     container_name: quizzes_game_io_backend_redis
-    networks:
-      - backend_net
     image: redis:7.2
+    command:
+      [
+        'redis-server',
+        '--appendonly',
+        'yes',
+        '--appendfsync',
+        'everysec',
+        '--protected-mode',
+        'no',
+      ]
+    networks: [backend_net]
     ports:
-      - 6379:6379
+      - '6379:6379'
     volumes:
       - quizzes_game_io_backend_redis_data:/data
+
+  # ---------------- Observability: Logs ----------------
+  loki:
+    image: grafana/loki:2.9.4
+    command: -config.file=/etc/loki/loki-config.yml
+    networks: [obs_net]
+    volumes:
+      - ./loki/loki-config.yml:/etc/loki/loki-config.yml:ro
+      - quizzes_game_io_backend_loki-data:/loki
+
+  promtail:
+    image: grafana/promtail:2.9.4
+    command: -config.file=/etc/promtail/promtail.yml
+    networks: [obs_net]
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/log:/var/log:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./promtail/promtail.yml:/etc/promtail/promtail.yml:ro
+    depends_on: [loki]
+
+  grafana:
+    image: grafana/grafana:11.1.0
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    networks: [obs_net]
+    ports:
+      - '3001:3000'
+    volumes:
+      - quizzes_game_io--backend-grafana-data:/var/lib/grafana
+    depends_on: [loki]
+
+  # ---------------- Observability: Metrics ----------------
+  prometheus:
+    image: prom/prometheus:v2.55.0
+    command: ['--config.file=/etc/prometheus/prometheus.yml']
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    networks: [obs_net]
+    ports:
+      - '9090:9090'
+
+  node_exporter:
+    image: prom/node-exporter:v1.8.1
+    pid: host
+    volumes:
+      - /:/host:ro,rslave
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+    command:
+      - --path.rootfs=/host
+    networks: [obs_net]
+
+  postgres_exporter:
+    image: prometheuscommunity/postgres-exporter:v0.15.0
+    environment:
+      # Postgres 접속 정보: 네가 쓰는 DB/유저/패스 그대로 반영
+      DATA_SOURCE_NAME: 'postgresql://root:local@quizzes_game_io_backend_postgres:5432/quizzes_game_io_backend?sslmode=disable'
+    networks:
+      - obs_net # Prometheus가 긁어감
+      - backend_net # Postgres에 접속
+
+  redis_exporter:
+    image: oliver006/redis_exporter:v1.62.0
+    container_name: redis_exporter # 고정해두면 디버깅 편함
+    command: ['--redis.addr=redis://quizzes_game_io_backend_redis:6379']
+    networks:
+      - obs_net # Prometheus가 스크랩
+      - backend_net # Redis에 접속
 
 volumes:
   quizzes_game_io_backend_data:
     driver: local
   quizzes_game_io_backend_redis_data:
+    driver: local
+  quizzes_game_io--backend-grafana-data:
+    driver: local
+  quizzes_game_io_backend_loki-data:
     driver: local
