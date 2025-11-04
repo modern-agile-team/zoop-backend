@@ -1,18 +1,24 @@
 name: backend-dev
 
 on:
-  push:
-    branches: ['main']
+  workflow_run:
+    workflows: ['CI (lint & test)']
+    types: [completed]
 
 jobs:
   build-and-push:
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
     steps:
-      - name: Checkout
+      - name: Checkout (same commit as CI)
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: Set up Buildx
         uses: docker/setup-buildx-action@v3
