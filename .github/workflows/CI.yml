@@ -1,0 +1,62 @@
+name: CI (lint & test)
+
+on:
+  push:
+    branches: ['**']
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Restore node_modules cache
+        id: cache-node_modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node22-${{ hashFiles('package-lock.json') }}
+
+      - name: Install deps (only if cache miss)
+        if: steps.cache-node_modules.outputs.cache-hit != 'true'
+        run: npm ci --no-audit --no-fund
+
+      - name: Lint
+        run: npm run lint
+
+  unit-test:
+    runs-on: ubuntu-latest
+    env:
+      NODE_ENV: test
+      TESTCONTAINERS_RYUK_DISABLED: 'true'
+      TESTCONTAINERS_CHECKS_DISABLE: 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Restore node_modules cache
+        id: cache-node_modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node22-${{ hashFiles('package-lock.json') }}
+
+      - name: Install deps (only if cache miss)
+        if: steps.cache-node_modules.outputs.cache-hit != 'true'
+        run: npm ci --no-audit --no-fund
+
+      - name: Unit Test (Testcontainers will start Postgres/Redis)
+        run: npm run test
