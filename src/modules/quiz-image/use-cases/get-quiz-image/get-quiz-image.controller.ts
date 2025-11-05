@@ -1,13 +1,7 @@
 import { Controller, Get, HttpStatus, Param, UseGuards } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
-import {
-  ApiBearerAuth,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 import { QuizImageDtoAssembler } from '@module/quiz-image/assemblers/quiz-image-dto.assembler';
 import { QuizImageAdminDto } from '@module/quiz-image/dto/quiz-image.admin-dto';
 import { QuizImage } from '@module/quiz-image/entities/quiz-image.entity';
@@ -30,7 +24,6 @@ export class GetQuizImageController {
   constructor(private readonly queryBus: QueryBus) {}
 
   @ApiOperation({ summary: '퀴즈 이미지 단건 조회' })
-  @ApiBearerAuth()
   @ApiErrorResponse({
     [HttpStatus.BAD_REQUEST]: [RequestValidationError],
     [HttpStatus.UNAUTHORIZED]: [UnauthorizedError],
@@ -38,7 +31,7 @@ export class GetQuizImageController {
     [HttpStatus.NOT_FOUND]: [QuizImageNotFoundError],
   })
   @ApiOkResponse({ type: QuizAdminDto })
-  @UseGuards(JwtAuthGuard, AdminGuard)
+  @UseGuards(AdminGuard)
   @Get('admin/quiz-images/:quizImageId')
   async getQuizImage(
     @Param('quizImageId') quizImageId: string,

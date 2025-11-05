@@ -7,14 +7,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import {
-  ApiBearerAuth,
-  ApiNoContentResponse,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiNoContentResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 import { NicknameSource } from '@module/nickname-source/entities/nickname-source.entity';
 import { NicknameSourceNotFoundError } from '@module/nickname-source/errors/nickname-source-not-found.error';
 import { DeleteNicknameSourceCommand } from '@module/nickname-source/use-cases/delete-nickname-source/delete-nickname-source.command';
@@ -34,7 +28,6 @@ export class DeleteNicknameSourceController {
   constructor(private readonly commandBus: CommandBus) {}
 
   @ApiOperation({ summary: '닉네임 소스 삭제' })
-  @ApiBearerAuth()
   @ApiErrorResponse({
     [HttpStatus.BAD_REQUEST]: [RequestValidationError],
     [HttpStatus.UNAUTHORIZED]: [UnauthorizedError],
@@ -42,7 +35,7 @@ export class DeleteNicknameSourceController {
     [HttpStatus.NOT_FOUND]: [NicknameSourceNotFoundError],
   })
   @ApiNoContentResponse()
-  @UseGuards(JwtAuthGuard, AdminGuard)
+  @UseGuards(AdminGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete('admin/nickname-sources/:nicknameSourceId')
   async deleteNicknameSource(

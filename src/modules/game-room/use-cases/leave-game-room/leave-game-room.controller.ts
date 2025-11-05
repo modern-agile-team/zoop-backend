@@ -1,20 +1,7 @@
-import {
-  Controller,
-  Delete,
-  HttpStatus,
-  Inject,
-  Param,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Delete, HttpStatus, Inject, Param } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import {
-  ApiBearerAuth,
-  ApiNoContentResponse,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiNoContentResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 import { GameRoomAccessDeniedError } from '@module/game-room/errors/game-room-access-denied.error';
 import { GameRoomMemberNotFoundError } from '@module/game-room/errors/game-room-member-not-found.error';
 import { GameRoomNotFoundError } from '@module/game-room/errors/game-room-not-found.error';
@@ -42,7 +29,6 @@ export class LeaveGameRoomController {
   ) {}
 
   @ApiOperation({ summary: '게임 방 퇴장' })
-  @ApiBearerAuth()
   @ApiNoContentResponse()
   @ApiErrorResponse({
     [HttpStatus.BAD_REQUEST]: [RequestValidationError],
@@ -52,7 +38,6 @@ export class LeaveGameRoomController {
       GameRoomMemberNotFoundError,
     ],
   })
-  @UseGuards(JwtAuthGuard)
   @Delete('/game-room/:gameRoomId/members/me')
   async leaveGameRoom(
     @CurrentUser() currentUser: ICurrentUser,

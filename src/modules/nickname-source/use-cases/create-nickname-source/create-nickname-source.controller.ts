@@ -1,13 +1,7 @@
 import { Body, Controller, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import {
-  ApiBearerAuth,
-  ApiCreatedResponse,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 import { NicknameSourceDtoAssembler } from '@module/nickname-source/assemblers/nickname-source-dto.assembler';
 import { NicknameSourceAdminDto } from '@module/nickname-source/dto/nickname-source.admin-dto';
 import { NicknameSource } from '@module/nickname-source/entities/nickname-source.entity';
@@ -30,7 +24,6 @@ export class CreateNicknameSourceController {
   constructor(private readonly commandBus: CommandBus) {}
 
   @ApiOperation({ summary: '닉네임 소스 생성' })
-  @ApiBearerAuth()
   @ApiErrorResponse({
     [HttpStatus.BAD_REQUEST]: [RequestValidationError],
     [HttpStatus.UNAUTHORIZED]: [UnauthorizedError],
@@ -38,7 +31,7 @@ export class CreateNicknameSourceController {
     [HttpStatus.CONFLICT]: [NicknameSourceAlreadyExistsError],
   })
   @ApiCreatedResponse({ type: NicknameSourceAdminDto })
-  @UseGuards(JwtAuthGuard, AdminGuard)
+  @UseGuards(AdminGuard)
   @Post('admin/nickname-sources')
   async createNicknameSourceAdmin(
     @Body() body: CreateNicknameSourceAdminDto,

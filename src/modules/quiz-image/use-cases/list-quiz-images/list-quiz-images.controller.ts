@@ -1,13 +1,7 @@
 import { Controller, Get, HttpStatus, Query, UseGuards } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
-import {
-  ApiBearerAuth,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 import { QuizImageCollectionDtoAssembler } from '@module/quiz-image/assemblers/quiz-image-collection-dto.assembler';
 import { QuizImageCollectionAdminDto } from '@module/quiz-image/dto/quiz-image.collection.admin-dto';
 import { QuizImage } from '@module/quiz-image/entities/quiz-image.entity';
@@ -28,18 +22,14 @@ import { AdminGuard } from '@common/guards/admin.guard';
 export class ListQuizImagesController {
   constructor(private readonly queryBus: QueryBus) {}
 
-  @ApiErrorResponse({
-    [HttpStatus.BAD_REQUEST]: [RequestValidationError],
-  })
   @ApiOperation({ summary: '퀴즈 이미지 리스트 조회' })
-  @ApiBearerAuth()
   @ApiErrorResponse({
     [HttpStatus.BAD_REQUEST]: [RequestValidationError],
     [HttpStatus.UNAUTHORIZED]: [UnauthorizedError],
     [HttpStatus.FORBIDDEN]: [PermissionDeniedError],
   })
   @ApiOkResponse({ type: QuizImageCollectionAdminDto })
-  @UseGuards(JwtAuthGuard, AdminGuard)
+  @UseGuards(AdminGuard)
   @Get('admin/quiz-images')
   async listQuizImagesAdmin(
     @Query() dto: ListQuizImagesAdminDto,

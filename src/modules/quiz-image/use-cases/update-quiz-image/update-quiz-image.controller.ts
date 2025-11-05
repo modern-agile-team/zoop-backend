@@ -7,14 +7,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import {
-  ApiBearerAuth,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 import { QuizImageDtoAssembler } from '@module/quiz-image/assemblers/quiz-image-dto.assembler';
 import { QuizImageAdminDto } from '@module/quiz-image/dto/quiz-image.admin-dto';
 import { QuizImage } from '@module/quiz-image/entities/quiz-image.entity';
@@ -38,7 +32,6 @@ export class UpdateQuizImageController {
   constructor(private readonly commandBus: CommandBus) {}
 
   @ApiOperation({ summary: '퀴즈 이미지 수정' })
-  @ApiBearerAuth()
   @ApiErrorResponse({
     [HttpStatus.BAD_REQUEST]: [RequestValidationError],
     [HttpStatus.UNAUTHORIZED]: [UnauthorizedError],
@@ -46,9 +39,9 @@ export class UpdateQuizImageController {
     [HttpStatus.NOT_FOUND]: [QuizImageNotFoundError],
   })
   @ApiOkResponse({ type: QuizAdminDto })
-  @UseGuards(JwtAuthGuard, AdminGuard)
+  @UseGuards(AdminGuard)
   @Patch('admin/quiz-images/:quizImageId')
-  async updateQuizImage(
+  async updateQuizImageAdmin(
     @Param('quizImageId') quizImageId: string,
     @Body() body: UpdateQuizImageAdminDto,
   ): Promise<QuizImageAdminDto> {

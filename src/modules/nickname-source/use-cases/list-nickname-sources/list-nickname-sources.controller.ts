@@ -1,13 +1,7 @@
 import { Controller, Get, HttpStatus, Query, UseGuards } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
-import {
-  ApiBearerAuth,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 import { NicknameSourceCollectionDtoAssembler } from '@module/nickname-source/assemblers/nickname-source-dto-collection.assembler';
 import { NicknameSourceCollectionAdminDto } from '@module/nickname-source/dto/nickname-source-collection.admin-dto';
 import { NicknameSource } from '@module/nickname-source/entities/nickname-source.entity';
@@ -29,14 +23,13 @@ export class ListNicknameSourcesController {
   constructor(private readonly queryBus: QueryBus) {}
 
   @ApiOperation({ summary: '닉네임 소스 리스트 조회' })
-  @ApiBearerAuth()
   @ApiErrorResponse({
     [HttpStatus.BAD_REQUEST]: [RequestValidationError],
     [HttpStatus.UNAUTHORIZED]: [UnauthorizedError],
     [HttpStatus.FORBIDDEN]: [PermissionDeniedError],
   })
   @ApiOkResponse({ type: NicknameSourceCollectionAdminDto })
-  @UseGuards(JwtAuthGuard, AdminGuard)
+  @UseGuards(AdminGuard)
   @Get('admin/nickname-sources')
   async listNicknameSources(
     @Query() dto: ListNicknameSourcesAdminDto,

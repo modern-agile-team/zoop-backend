@@ -15,6 +15,8 @@ export class SwaggerConfig {
 
     const document = SwaggerModule.createDocument(app, config);
 
+    document.security = [{ bearer: [] }];
+
     const GLOBAL_PREFIX = process.env.SWAGGER_GLOBAL_PREFIX;
 
     if (GLOBAL_PREFIX) {

@@ -1,15 +1,9 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
-import {
-  ApiBearerAuth,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { ActiveAccountCountDto } from '@module/account/dto/active-account-count.dto';
 import { GetActiveAccountCountQuery } from '@module/account/use-cases/get-active-account-count/get-active-account-count.query';
-import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 
 import { ApiErrorResponse } from '@common/decorator/api-fail-response.decorator';
 
@@ -23,8 +17,6 @@ export class GetActiveAccountCountController {
   @ApiOkResponse({
     type: ActiveAccountCountDto,
   })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   @Get('accounts/active-account-count')
   async getActiveAccountCount() {
     const query = new GetActiveAccountCountQuery({});

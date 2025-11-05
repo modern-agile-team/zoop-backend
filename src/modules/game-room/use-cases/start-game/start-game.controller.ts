@@ -1,20 +1,7 @@
-import {
-  Controller,
-  HttpStatus,
-  Inject,
-  Param,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, HttpStatus, Inject, Param, Post } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import {
-  ApiBearerAuth,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 import { GameRoomDtoAssembler } from '@module/game-room/assemblers/game-room-dto.assembler';
 import { GameRoomDto } from '@module/game-room/dto/game-room.dto';
 import { GameRoom } from '@module/game-room/entities/game-room.entity';
@@ -51,8 +38,6 @@ export class StartGameController {
     [HttpStatus.FORBIDDEN]: [GameRoomAccessDeniedError],
     [HttpStatus.NOT_FOUND]: [GameRoomNotFoundError],
   })
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
   @Post('/game-room/:gameRoomId/start')
   async startGame(
     @CurrentUser() currentUser: ICurrentUser,

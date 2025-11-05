@@ -1,18 +1,12 @@
-import { Controller, Get, HttpStatus, UseGuards } from '@nestjs/common';
+import { Controller, Get, HttpStatus } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
-import {
-  ApiBearerAuth,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { AccountDtoAssembler } from '@module/account/assemblers/account-dto.assembler';
 import { AccountDto } from '@module/account/dto/account.dto';
 import { Account } from '@module/account/entities/account.entity';
 import { AccountNotFoundError } from '@module/account/errors/account-not-found.error';
 import { GetAccountQuery } from '@module/account/use-cases/get-account/get-account.query';
-import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 
 import { BaseHttpException } from '@common/base/base-http-exception';
 import { RequestValidationError } from '@common/base/base.error';
@@ -33,8 +27,6 @@ export class GetAccountController {
     [HttpStatus.NOT_FOUND]: [AccountNotFoundError],
   })
   @ApiOkResponse({ type: AccountDto })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   @Get('accounts/me')
   async getMe(@CurrentUser() currentUser: ICurrentUser) {
     try {

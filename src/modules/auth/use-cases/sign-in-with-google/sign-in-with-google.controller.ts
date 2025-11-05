@@ -6,6 +6,7 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiQuery,
+  ApiSecurity,
   ApiTags,
 } from '@nestjs/swagger';
 
@@ -13,6 +14,7 @@ import { Response } from 'express';
 
 import { AuthToken } from '@module/auth/entities/auth-token.vo';
 import { GoogleAuthGuard } from '@module/auth/guards/google-auth.guard';
+import { Public } from '@module/auth/jwt/jwt-auth.guard';
 import { SignInWithGoogleCommand } from '@module/auth/use-cases/sign-in-with-google/sign-in-with-google.command';
 
 import { ENV_KEY } from '@common/app-config/app-config.constant';
@@ -42,6 +44,7 @@ export class SignInWithGoogleController {
     );
   }
 
+  @ApiSecurity({})
   @ApiErrorResponse({})
   @ApiOperation({
     summary: '구글 회원가입 로그인',
@@ -62,6 +65,7 @@ export class SignInWithGoogleController {
     required: false,
     type: String,
   })
+  @Public()
   @UseGuards(GoogleAuthGuard)
   @Get('/auth/google')
   async signInWithGoogle() {
@@ -69,8 +73,9 @@ export class SignInWithGoogleController {
   }
 
   @ApiExcludeEndpoint()
-  @Get('/auth/google/callback')
+  @Public()
   @UseGuards(AuthGuard('google'))
+  @Get('/auth/google/callback')
   async signInWithGoogleCallback(
     @Req() req: any,
     @Res({ passthrough: true }) res: Response,

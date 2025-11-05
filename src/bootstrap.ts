@@ -12,6 +12,8 @@ import cookieParser from 'cookie-parser';
 
 import { AppModule } from 'src/app.module';
 
+import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
+
 import { BaseHttpExceptionFilter } from '@common/base/base-http-exception.filter';
 import { RequestValidationError } from '@common/base/base.error';
 
@@ -79,6 +81,12 @@ export const setGlobalPipe = (app: INestApplication) => {
 
 export const setLogger = (app: INestApplication) => {
   app.useLogger(app.get(LOGGER));
+};
+
+export const setGlobalGuard = (app: INestApplication) => {
+  const jwtAuthGuard = app.get(JwtAuthGuard);
+
+  app.useGlobalGuards(jwtAuthGuard);
 };
 
 export const setGlobalInterceptor = (app: INestApplication) => {

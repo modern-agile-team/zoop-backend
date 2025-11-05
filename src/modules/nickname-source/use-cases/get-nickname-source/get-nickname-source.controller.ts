@@ -1,13 +1,7 @@
 import { Controller, Get, HttpStatus, Param, UseGuards } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
-import {
-  ApiBearerAuth,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 import { NicknameSourceDtoAssembler } from '@module/nickname-source/assemblers/nickname-source-dto.assembler';
 import { NicknameSourceAdminDto } from '@module/nickname-source/dto/nickname-source.admin-dto';
 import { NicknameSource } from '@module/nickname-source/entities/nickname-source.entity';
@@ -29,7 +23,6 @@ export class GetNicknameSourceController {
   constructor(private readonly queryBus: QueryBus) {}
 
   @ApiOperation({ summary: '닉네임 소스 조회' })
-  @ApiBearerAuth()
   @ApiErrorResponse({
     [HttpStatus.BAD_REQUEST]: [RequestValidationError],
     [HttpStatus.UNAUTHORIZED]: [UnauthorizedError],
@@ -37,7 +30,7 @@ export class GetNicknameSourceController {
     [HttpStatus.NOT_FOUND]: [NicknameSourceNotFoundError],
   })
   @ApiOkResponse({ type: NicknameSourceAdminDto })
-  @UseGuards(JwtAuthGuard, AdminGuard)
+  @UseGuards(AdminGuard)
   @Get('admin/nickname-sources/:nicknameSourceId')
   async getNicknameSourceAdmin(
     @Param('nicknameSourceId') nicknameSourceId: string,

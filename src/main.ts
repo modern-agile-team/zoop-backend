@@ -4,6 +4,7 @@ import {
   setCookie,
   setCors,
   setGlobalExceptionFilter,
+  setGlobalGuard,
   setGlobalInterceptor,
   setGlobalPipe,
   setLogger,
@@ -18,6 +19,7 @@ async function bootstrap() {
   setCors(app);
   setGlobalPipe(app);
   setLogger(app);
+  setGlobalGuard(app);
   setGlobalInterceptor(app);
   setGlobalExceptionFilter(app);
   SwaggerConfig.setup(app);

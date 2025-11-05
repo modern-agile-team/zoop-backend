@@ -6,14 +6,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import {
-  ApiBearerAuth,
-  ApiNoContentResponse,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiNoContentResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 import { QuizNotFoundError } from '@module/quiz/errors/quiz-not-found.error';
 import { DeleteQuizCommand } from '@module/quiz/use-cases/delete-quiz/delete-quiz.command';
 
@@ -32,7 +26,6 @@ export class DeleteQuizController {
   constructor(private readonly commandBus: CommandBus) {}
 
   @ApiOperation({ summary: '퀴즈 삭제' })
-  @ApiBearerAuth()
   @ApiErrorResponse({
     [HttpStatus.BAD_REQUEST]: [RequestValidationError],
     [HttpStatus.UNAUTHORIZED]: [UnauthorizedError],
@@ -40,7 +33,7 @@ export class DeleteQuizController {
     [HttpStatus.NOT_FOUND]: [QuizNotFoundError],
   })
   @ApiNoContentResponse()
-  @UseGuards(JwtAuthGuard, AdminGuard)
+  @UseGuards(AdminGuard)
   @Delete('admin/quizzes/:quizId')
   async deleteQuizAdmin(@Param('quizId') quizId: string): Promise<void> {
     try {

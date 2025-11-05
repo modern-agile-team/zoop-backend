@@ -1,7 +1,6 @@
 import { Body, Controller, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import {
-  ApiBearerAuth,
   ApiConsumes,
   ApiCreatedResponse,
   ApiOperation,
@@ -11,7 +10,6 @@ import {
 import imageSize from 'image-size';
 import { FormDataRequest } from 'nestjs-form-data';
 
-import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 import { QuizImageDtoAssembler } from '@module/quiz-image/assemblers/quiz-image-dto.assembler';
 import { QuizImageAdminDto } from '@module/quiz-image/dto/quiz-image.admin-dto';
 import { QuizImage } from '@module/quiz-image/entities/quiz-image.entity';
@@ -31,19 +29,15 @@ import { AdminGuard } from '@common/guards/admin.guard';
 export class CreateQuizImageController {
   constructor(private readonly commandBus: CommandBus) {}
 
-  @ApiErrorResponse({
-    [HttpStatus.BAD_REQUEST]: [RequestValidationError],
-  })
   @ApiOperation({ summary: '퀴즈 이미지 업로드' })
   @ApiConsumes('multipart/form-data')
-  @ApiBearerAuth()
   @ApiErrorResponse({
     [HttpStatus.BAD_REQUEST]: [RequestValidationError],
     [HttpStatus.UNAUTHORIZED]: [UnauthorizedError],
     [HttpStatus.FORBIDDEN]: [PermissionDeniedError],
   })
   @ApiCreatedResponse({ type: QuizImageAdminDto })
-  @UseGuards(JwtAuthGuard, AdminGuard)
+  @UseGuards(AdminGuard)
   @FormDataRequest()
   @Post('admin/quiz-images')
   async createQuizImageAdmin(
