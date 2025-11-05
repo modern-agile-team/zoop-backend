@@ -5,6 +5,7 @@ import {
   TransactionHost,
 } from '@nestjs-cls/transactional';
 import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
+import { Prisma } from '@prisma/client';
 
 import { Quiz } from '@module/quiz/entities/quiz.entity';
 import { QuizMapper } from '@module/quiz/mappers/quiz.mapper';
@@ -41,8 +42,16 @@ export class QuizRepository
     });
   }
 
-  async findAll(): Promise<Quiz[]> {
-    const quizzes = await this.txHost.tx.quiz.findMany();
+  async findAll(params: { filter: QuizFilter }): Promise<Quiz[]> {
+    const where: Prisma.QuizWhereInput = {};
+
+    if (params.filter?.imageFileName !== undefined) {
+      where.imageFileName = params.filter.imageFileName;
+    }
+
+    const quizzes = await this.txHost.tx.quiz.findMany({
+      where,
+    });
 
     return quizzes.map((quiz) => this.mapper.toEntity(quiz));
   }

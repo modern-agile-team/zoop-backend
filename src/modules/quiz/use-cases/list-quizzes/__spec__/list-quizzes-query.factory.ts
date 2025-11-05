@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker';
 import { Factory } from 'rosie';
 
 import { ListQuizzesQuery } from '@module/quiz/use-cases/list-quizzes/list-quizzes.query';
@@ -5,4 +6,6 @@ import { ListQuizzesQuery } from '@module/quiz/use-cases/list-quizzes/list-quizz
 export const ListQuizzesQueryFactory = Factory.define<ListQuizzesQuery>(
   ListQuizzesQuery.name,
   ListQuizzesQuery,
-).attrs({});
+).attrs({
+  imageFileName: () => faker.string.nanoid(),
+});

@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, UseGuards } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Query, UseGuards } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import {
   ApiBearerAuth,
@@ -11,6 +11,7 @@ import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 import { QuizCollectionDtoAssembler } from '@module/quiz/assemblers/quiz-collection-dto.assembler';
 import { QuizCollectionAdminDto } from '@module/quiz/dto/quiz-collection.admin-dto';
 import { Quiz } from '@module/quiz/entities/quiz.entity';
+import { ListQuizzesDto } from '@module/quiz/use-cases/list-quizzes/list-quizzes.dto';
 import { ListQuizzesQuery } from '@module/quiz/use-cases/list-quizzes/list-quizzes.query';
 
 import {
@@ -36,8 +37,12 @@ export class ListQuizzesController {
   @ApiOkResponse({ type: QuizCollectionAdminDto })
   @UseGuards(JwtAuthGuard, AdminGuard)
   @Get('admin/quizzes')
-  async listQuizzes(): Promise<QuizCollectionAdminDto> {
-    const query = new ListQuizzesQuery({});
+  async listQuizzes(
+    @Query() dto: ListQuizzesDto,
+  ): Promise<QuizCollectionAdminDto> {
+    const query = new ListQuizzesQuery({
+      imageFileName: dto.imageFileName,
+    });
 
     const quizzes = await this.queryBus.execute<ListQuizzesQuery, Quiz[]>(
       query,
