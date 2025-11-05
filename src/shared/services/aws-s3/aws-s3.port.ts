@@ -1,7 +1,7 @@
 export const AWS_S3_CLIENT = Symbol('S3Client');
 export const AWS_S3_PORT = Symbol('AwsS3Port');
 
-export type S3FileType = 'quizImage';
+export type S3FileType = 'quizImage' | 'avatar';
 
 export interface UploadFileProps {
   file: Buffer;

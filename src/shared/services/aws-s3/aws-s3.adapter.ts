@@ -33,6 +33,9 @@ export class AwsS3Adapter implements AwsS3Port {
       quizImage: this.appConfigService.get<string>(
         ENV_KEY.AWS_S3_QUIZ_IMAGE_FILE_PATH,
       ),
+      avatar: this.appConfigService.get<string>(
+        ENV_KEY.AWS_S3_AVATAR_FILE_PATH,
+      ),
     };
   }
 
