@@ -40,6 +40,7 @@ export class CreateQuizImageHandler
       originalFileName: command.originalFileName,
       extension: command.extension,
       contentLength: command.contentLength,
+      contentType: command.contentType,
       width: command.width,
       height: command.height,
     });

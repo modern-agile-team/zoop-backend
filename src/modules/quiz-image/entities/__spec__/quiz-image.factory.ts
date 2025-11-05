@@ -19,6 +19,7 @@ export const QuizImageFactory = Factory.define<QuizImage & QuizImageProps>(
     fileName: () => faker.string.nanoid(),
     extension: () => faker.word.verb(),
     contentLength: () => faker.string.numeric(),
+    contentType: () => faker.system.mimeType(),
     width: () => faker.number.int({ min: 100, max: 1000 }),
     height: () => faker.number.int({ min: 100, max: 1000 }),
     createdAt: () => new Date(),

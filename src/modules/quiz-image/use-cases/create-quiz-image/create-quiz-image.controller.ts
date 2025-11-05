@@ -60,6 +60,7 @@ export class CreateQuizImageController {
       height: quizImageDimensions.height,
       extension: quizImageDimensions.type as string,
       contentLength: String(dto.file.size),
+      contentType: dto.file.mimeType,
     });
 
     const quizImage = await this.commandBus.execute<

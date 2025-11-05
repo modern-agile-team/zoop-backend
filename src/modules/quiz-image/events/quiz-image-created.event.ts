@@ -7,6 +7,7 @@ interface QuizImageCreatedEventPayload {
   fileName: string;
   extension: string;
   contentLength: string;
+  contentType: string;
   width: number;
   height: number;
 }
