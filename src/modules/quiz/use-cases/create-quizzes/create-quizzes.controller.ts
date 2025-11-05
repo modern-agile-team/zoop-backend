@@ -17,10 +17,10 @@ import {
 
 import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 import { QuizDtoAssembler } from '@module/quiz/assemblers/quiz-dto.assembler';
-import { QuizDto } from '@module/quiz/dto/quiz.dto';
+import { QuizAdminDto } from '@module/quiz/dto/quiz.admin-dto';
 import { Quiz } from '@module/quiz/entities/quiz.entity';
+import { CreateQuizzesAdminDto } from '@module/quiz/use-cases/create-quizzes/create-quizzes.admin-dto';
 import { CreateQuizzesCommand } from '@module/quiz/use-cases/create-quizzes/create-quizzes.command';
-import { CreateQuizzesDto } from '@module/quiz/use-cases/create-quizzes/create-quizzes.dto';
 
 import {
   PermissionDeniedError,
@@ -45,14 +45,14 @@ export class CreateQuizzesController {
     [HttpStatus.UNAUTHORIZED]: [UnauthorizedError],
     [HttpStatus.FORBIDDEN]: [PermissionDeniedError],
   })
-  @ApiOkResponse({ type: [QuizDto] })
-  @ApiBody({ type: [CreateQuizzesDto] })
+  @ApiOkResponse({ type: [QuizAdminDto] })
+  @ApiBody({ type: [CreateQuizzesAdminDto] })
   @UseGuards(JwtAuthGuard, AdminGuard)
   @Put('admin/quizzes')
   async createQuizzesAdmin(
-    @Body(new ParseArrayPipe({ items: CreateQuizzesDto }))
-    dtos: CreateQuizzesDto[],
-  ): Promise<QuizDto[]> {
+    @Body(new ParseArrayPipe({ items: CreateQuizzesAdminDto }))
+    dtos: CreateQuizzesAdminDto[],
+  ): Promise<QuizAdminDto[]> {
     const command = new CreateQuizzesCommand(
       dtos.map((dto) => ({
         type: dto.type,
@@ -66,6 +66,6 @@ export class CreateQuizzesController {
       command,
     );
 
-    return quizzes.map((quiz) => QuizDtoAssembler.convertToDto(quiz));
+    return quizzes.map((quiz) => QuizDtoAssembler.convertToAdminDto(quiz));
   }
 }

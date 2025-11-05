@@ -9,7 +9,7 @@ import {
 
 import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 import { QuizDtoAssembler } from '@module/quiz/assemblers/quiz-dto.assembler';
-import { QuizDto } from '@module/quiz/dto/quiz.dto';
+import { QuizAdminDto } from '@module/quiz/dto/quiz.admin-dto';
 import { Quiz } from '@module/quiz/entities/quiz.entity';
 import { QuizNotFoundError } from '@module/quiz/errors/quiz-not-found.error';
 import { GetQuizQuery } from '@module/quiz/use-cases/get-quiz/get-quiz.query';
@@ -35,10 +35,12 @@ export class GetQuizController {
     [HttpStatus.UNAUTHORIZED]: [UnauthorizedError],
     [HttpStatus.FORBIDDEN]: [PermissionDeniedError],
   })
-  @ApiOkResponse({ type: QuizDto })
+  @ApiOkResponse({ type: QuizAdminDto })
   @UseGuards(JwtAuthGuard, AdminGuard)
   @Get('admin/quizzes/:quizId')
-  async getQuizzesAdmin(@Param('quizId') quizId: string): Promise<QuizDto> {
+  async getQuizzesAdmin(
+    @Param('quizId') quizId: string,
+  ): Promise<QuizAdminDto> {
     try {
       const query = new GetQuizQuery({
         quizId,
@@ -46,7 +48,7 @@ export class GetQuizController {
 
       const quiz = await this.queryBus.execute<GetQuizQuery, Quiz>(query);
 
-      return QuizDtoAssembler.convertToDto(quiz);
+      return QuizDtoAssembler.convertToAdminDto(quiz);
     } catch (error) {
       if (error instanceof QuizNotFoundError) {
         throw new BaseHttpException(HttpStatus.NOT_FOUND, error);

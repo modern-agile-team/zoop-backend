@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { IsOptional, IsString, Length } from 'class-validator';
 
-export class UpdateNicknameSourceDto {
+export class UpdateNicknameSourceAdminDto {
   @ApiProperty({
     minLength: 1,
     maxLength: 10,

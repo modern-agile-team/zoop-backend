@@ -16,12 +16,12 @@ import {
 
 import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 import { NicknameSourceDtoAssembler } from '@module/nickname-source/assemblers/nickname-source-dto.assembler';
-import { NicknameSourceDto } from '@module/nickname-source/dto/nickname-source.dto';
+import { NicknameSourceAdminDto } from '@module/nickname-source/dto/nickname-source.admin-dto';
 import { NicknameSource } from '@module/nickname-source/entities/nickname-source.entity';
 import { NicknameSourceAlreadyExistsError } from '@module/nickname-source/errors/nickname-source-already-exists.error';
 import { NicknameSourceNotFoundError } from '@module/nickname-source/errors/nickname-source-not-found.error';
+import { UpdateNicknameSourceAdminDto } from '@module/nickname-source/use-cases/update-nickname-source/update-nickname-source.admin-dto';
 import { UpdateNicknameSourceCommand } from '@module/nickname-source/use-cases/update-nickname-source/update-nickname-source.command';
-import { UpdateNicknameSourceDto } from '@module/nickname-source/use-cases/update-nickname-source/update-nickname-source.dto';
 
 import { BaseHttpException } from '@common/base/base-http-exception';
 import {
@@ -46,13 +46,13 @@ export class UpdateNicknameSourceController {
     [HttpStatus.NOT_FOUND]: [NicknameSourceNotFoundError],
     [HttpStatus.CONFLICT]: [NicknameSourceAlreadyExistsError],
   })
-  @ApiOkResponse({ type: NicknameSourceDto })
+  @ApiOkResponse({ type: NicknameSourceAdminDto })
   @UseGuards(JwtAuthGuard, AdminGuard)
   @Patch('admin/nickname-sources/:nicknameSourceId')
   async updateNicknameSource(
     @Param('nicknameSourceId') nicknameSourceId: string,
-    @Body() body: UpdateNicknameSourceDto,
-  ): Promise<NicknameSourceDto> {
+    @Body() body: UpdateNicknameSourceAdminDto,
+  ): Promise<NicknameSourceAdminDto> {
     try {
       const command = new UpdateNicknameSourceCommand({
         nicknameSourceId,
@@ -64,7 +64,7 @@ export class UpdateNicknameSourceController {
         NicknameSource
       >(command);
 
-      return NicknameSourceDtoAssembler.convertToDto(nicknameSource);
+      return NicknameSourceDtoAssembler.convertToAdminDto(nicknameSource);
     } catch (error) {
       if (error instanceof NicknameSourceNotFoundError) {
         throw new BaseHttpException(HttpStatus.NOT_FOUND, error);

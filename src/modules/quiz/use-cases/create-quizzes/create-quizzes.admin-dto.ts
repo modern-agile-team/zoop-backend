@@ -4,7 +4,7 @@ import { IsString } from 'class-validator';
 
 import { IsNullable } from '@common/validators/is-nullable.validator';
 
-export class CreateQuizzesDto {
+export class CreateQuizzesAdminDto {
   @ApiProperty()
   @IsString()
   type: string;

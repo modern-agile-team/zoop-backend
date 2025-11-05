@@ -9,9 +9,9 @@ import {
 
 import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 import { QuizImageCollectionDtoAssembler } from '@module/quiz-image/assemblers/quiz-image-collection-dto.assembler';
-import { QuizImageCollectionDto } from '@module/quiz-image/dto/quiz-image.collection.dto';
+import { QuizImageCollectionAdminDto } from '@module/quiz-image/dto/quiz-image.collection.admin-dto';
 import { QuizImage } from '@module/quiz-image/entities/quiz-image.entity';
-import { ListQuizImagesDto } from '@module/quiz-image/use-cases/list-quiz-images/list-quiz-images.dto';
+import { ListQuizImagesAdminDto } from '@module/quiz-image/use-cases/list-quiz-images/list-quiz-images.admin-dto';
 import { ListQuizImagesQuery } from '@module/quiz-image/use-cases/list-quiz-images/list-quiz-images.query';
 
 import { OffsetPage } from '@common/base/base.entity';
@@ -38,10 +38,12 @@ export class ListQuizImagesController {
     [HttpStatus.UNAUTHORIZED]: [UnauthorizedError],
     [HttpStatus.FORBIDDEN]: [PermissionDeniedError],
   })
-  @ApiOkResponse({ type: QuizImageCollectionDto })
+  @ApiOkResponse({ type: QuizImageCollectionAdminDto })
   @UseGuards(JwtAuthGuard, AdminGuard)
   @Get('admin/quiz-images')
-  async listQuizImagesAdmin(@Query() dto: ListQuizImagesDto) {
+  async listQuizImagesAdmin(
+    @Query() dto: ListQuizImagesAdminDto,
+  ): Promise<QuizImageCollectionAdminDto> {
     const query = new ListQuizImagesQuery({
       category: dto.category,
       sort: dto.sort,
@@ -54,6 +56,6 @@ export class ListQuizImagesController {
       OffsetPage<QuizImage>
     >(query);
 
-    return QuizImageCollectionDtoAssembler.convertToDto(offsetPage);
+    return QuizImageCollectionDtoAssembler.convertToAdminDto(offsetPage);
   }
 }

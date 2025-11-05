@@ -16,12 +16,12 @@ import {
 
 import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 import { QuizDtoAssembler } from '@module/quiz/assemblers/quiz-dto.assembler';
-import { QuizDto } from '@module/quiz/dto/quiz.dto';
+import { QuizAdminDto } from '@module/quiz/dto/quiz.admin-dto';
 import { Quiz } from '@module/quiz/entities/quiz.entity';
 import { QuizImageNotFoundError } from '@module/quiz/errors/quiz-image-not-found.error';
 import { QuizNotFoundError } from '@module/quiz/errors/quiz-not-found.error';
+import { UpdateQuizAdminDto } from '@module/quiz/use-cases/update-quiz/update-quiz.admin-dto';
 import { UpdateQuizCommand } from '@module/quiz/use-cases/update-quiz/update-quiz.command';
-import { UpdateQuizDto } from '@module/quiz/use-cases/update-quiz/update-quiz.dto';
 
 import { BaseHttpException } from '@common/base/base-http-exception';
 import {
@@ -45,13 +45,13 @@ export class UpdateQuizController {
     [HttpStatus.FORBIDDEN]: [PermissionDeniedError],
     [HttpStatus.NOT_FOUND]: [QuizNotFoundError],
   })
-  @ApiOkResponse({ type: QuizDto })
+  @ApiOkResponse({ type: QuizAdminDto })
   @UseGuards(JwtAuthGuard, AdminGuard)
   @Patch('admin/quizzes/:quizId')
   async updateQuizAdmin(
     @Param('quizId') quizId: string,
-    @Body() body: UpdateQuizDto,
-  ): Promise<QuizDto> {
+    @Body() body: UpdateQuizAdminDto,
+  ): Promise<QuizAdminDto> {
     try {
       const command = new UpdateQuizCommand({
         quizId,
@@ -65,7 +65,7 @@ export class UpdateQuizController {
         command,
       );
 
-      return QuizDtoAssembler.convertToDto(quiz);
+      return QuizDtoAssembler.convertToAdminDto(quiz);
     } catch (error) {
       if (error instanceof QuizNotFoundError) {
         throw new BaseHttpException(HttpStatus.NOT_FOUND, error);

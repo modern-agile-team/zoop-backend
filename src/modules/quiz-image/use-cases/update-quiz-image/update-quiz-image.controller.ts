@@ -16,12 +16,12 @@ import {
 
 import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 import { QuizImageDtoAssembler } from '@module/quiz-image/assemblers/quiz-image-dto.assembler';
-import { QuizImageDto } from '@module/quiz-image/dto/quiz-image.dto';
+import { QuizImageAdminDto } from '@module/quiz-image/dto/quiz-image.admin-dto';
 import { QuizImage } from '@module/quiz-image/entities/quiz-image.entity';
 import { QuizImageNotFoundError } from '@module/quiz-image/errors/quiz-image-not-found.error';
+import { UpdateQuizImageAdminDto } from '@module/quiz-image/use-cases/update-quiz-image/update-quiz-image.admin-dto';
 import { UpdateQuizImageCommand } from '@module/quiz-image/use-cases/update-quiz-image/update-quiz-image.command';
-import { UpdateQuizImageDto } from '@module/quiz-image/use-cases/update-quiz-image/update-quiz-image.dto';
-import { QuizDto } from '@module/quiz/dto/quiz.dto';
+import { QuizAdminDto } from '@module/quiz/dto/quiz.admin-dto';
 
 import { BaseHttpException } from '@common/base/base-http-exception';
 import {
@@ -45,13 +45,13 @@ export class UpdateQuizImageController {
     [HttpStatus.FORBIDDEN]: [PermissionDeniedError],
     [HttpStatus.NOT_FOUND]: [QuizImageNotFoundError],
   })
-  @ApiOkResponse({ type: QuizDto })
+  @ApiOkResponse({ type: QuizAdminDto })
   @UseGuards(JwtAuthGuard, AdminGuard)
   @Patch('admin/quiz-images/:quizImageId')
   async updateQuizImage(
     @Param('quizImageId') quizImageId: string,
-    @Body() body: UpdateQuizImageDto,
-  ): Promise<QuizImageDto> {
+    @Body() body: UpdateQuizImageAdminDto,
+  ): Promise<QuizImageAdminDto> {
     try {
       const command = new UpdateQuizImageCommand({
         quizImageId,
@@ -64,7 +64,7 @@ export class UpdateQuizImageController {
         QuizImage
       >(command);
 
-      return QuizImageDtoAssembler.convertToDto(quizImage);
+      return QuizImageDtoAssembler.convertToAdminDto(quizImage);
     } catch (error) {
       if (error instanceof QuizImageNotFoundError) {
         throw new BaseHttpException(HttpStatus.NOT_FOUND, error);

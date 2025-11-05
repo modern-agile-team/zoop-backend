@@ -1,16 +1,16 @@
 import { NicknameSourceDtoAssembler } from '@module/nickname-source/assemblers/nickname-source-dto.assembler';
-import { NicknameSourceCollectionDto } from '@module/nickname-source/dto/nickname-source-collection.dto';
+import { NicknameSourceCollectionAdminDto } from '@module/nickname-source/dto/nickname-source-collection.admin-dto';
 import { NicknameSource } from '@module/nickname-source/entities/nickname-source.entity';
 
 import { OffsetPage } from '@common/base/base.entity';
 
 export class NicknameSourceCollectionDtoAssembler {
-  static convertToDto(
+  static convertToAdminDto(
     page: OffsetPage<NicknameSource>,
-  ): NicknameSourceCollectionDto {
-    const dto = new NicknameSourceCollectionDto();
+  ): NicknameSourceCollectionAdminDto {
+    const dto = new NicknameSourceCollectionAdminDto();
 
-    dto.data = page.data.map(NicknameSourceDtoAssembler.convertToDto);
+    dto.data = page.data.map(NicknameSourceDtoAssembler.convertToAdminDto);
     dto.currentPage = page.currentPage;
     dto.perPage = page.perPage;
     dto.totalCount = page.totalCount;
