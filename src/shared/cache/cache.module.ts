@@ -12,10 +12,12 @@ import { CACHE_CLIENT } from '@shared/cache/cache.client.interface';
   imports: [AppConfigModule],
   providers: [
     {
-      useFactory: (appConfigService: AppConfigService) => {
-        const redis = new Redis(
-          `${appConfigService.get<string>('REDIS_URL')}/1`,
-        );
+      useFactory: () => {
+        /**
+         * @description 테스트 환경에서 동적으로 주입한 redis URL을 사용하지 못하기 때문에 process.env에서 직접 가져옴
+         * @see global-setup.ts
+         */
+        const redis = new Redis(`${process.env.REDIS_URL}/1`);
 
         return new CacheClient<unknown>(redis);
       },

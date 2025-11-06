@@ -13,6 +13,8 @@ async function setupRedis() {
   const redisHost = redis.getHost();
   const redisPort = redis.getMappedPort(6379);
 
+  console.log(`Redis is running on ${redisHost}:${redisPort}`);
+
   process.env.REDIS_URL = `redis://${redisHost}:${redisPort}`;
   global.__REDIS_CONTAINER__ = redis;
 }
@@ -24,7 +26,7 @@ async function setupPostgresql() {
 
   process.env.DATABASE_URL = `${postgresContainer.getConnectionUri()}?connection_limit=1`;
 
-  console.log(process.env.DATABASE_URL);
+  console.log(`Postgresql is running on ${process.env.DATABASE_URL}`);
 
   const postgresClient = new Client({
     connectionString: process.env.DATABASE_URL,
