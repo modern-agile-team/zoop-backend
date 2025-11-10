@@ -49,6 +49,7 @@ export class CreateAccountWithUsernameHandler
       username: command.username,
       password: command.password,
       nickname: nicknameSource.fullname,
+      avatarFileName: 'avatarFileName',
     });
 
     await this.accountRepository.insert(account);

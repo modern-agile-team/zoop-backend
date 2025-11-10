@@ -53,6 +53,7 @@ export class CreateAccountWithGoogleHandler
       role: command.role,
       socialProviderUid: command.socialProviderUid,
       nickname: nicknameSource.fullname,
+      avatarFileName: 'avatarFileName',
     });
 
     await this.accountRepository.insert(account);
