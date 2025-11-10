@@ -92,7 +92,9 @@ export class SignInWithGoogleController {
     res.cookie('access_token', authToken.accessToken, {
       secure: true,
       sameSite: 'none',
-      domain: this.ALLOW_COOKIE_DOMAIN,
+      domain: this.appConfigService.isProd()
+        ? this.ALLOW_COOKIE_DOMAIN
+        : undefined,
       httpOnly: true,
     });
 
