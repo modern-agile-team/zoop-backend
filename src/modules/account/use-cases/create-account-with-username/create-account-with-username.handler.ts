@@ -11,6 +11,10 @@ import {
 } from '@module/account/repositories/account/account.repository.port';
 import { CreateAccountWithUsernameCommand } from '@module/account/use-cases/create-account-with-username/create-account-with-username.command';
 import {
+  AVATAR_SERVICE,
+  IAvatarService,
+} from '@module/avatar/services/avatar-service/avatar.service.interface';
+import {
   INicknameSourceService,
   NICKNAME_SOURCE_SERVICE,
 } from '@module/nickname-source/services/nickname-source-service/nickname-source.service.interface';
@@ -29,6 +33,8 @@ export class CreateAccountWithUsernameHandler
     private readonly accountRepository: AccountRepositoryPort,
     @Inject(NICKNAME_SOURCE_SERVICE)
     private readonly nicknameSourceService: INicknameSourceService,
+    @Inject(AVATAR_SERVICE)
+    private readonly avatarService: IAvatarService,
     @Inject(EVENT_STORE) private readonly eventStore: IEventStore,
   ) {}
 
@@ -42,6 +48,7 @@ export class CreateAccountWithUsernameHandler
     }
 
     const nicknameSource = await this.nicknameSourceService.issueNickname();
+    const { avatarFileName } = await this.avatarService.assignRandomAvatar();
 
     const account = Account.createWithUsername({
       role: command.role,
@@ -49,7 +56,7 @@ export class CreateAccountWithUsernameHandler
       username: command.username,
       password: command.password,
       nickname: nicknameSource.fullname,
-      avatarFileName: 'avatarFileName',
+      avatarFileName: avatarFileName,
     });
 
     await this.accountRepository.insert(account);

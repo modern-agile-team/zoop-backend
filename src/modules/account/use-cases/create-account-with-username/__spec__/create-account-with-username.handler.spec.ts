@@ -10,6 +10,11 @@ import {
 import { CreateAccountWithUsernameCommandFactory } from '@module/account/use-cases/create-account-with-username/__spec__/create-account-with-username-command.factory';
 import { CreateAccountWithUsernameCommand } from '@module/account/use-cases/create-account-with-username/create-account-with-username.command';
 import { CreateAccountWithUsernameHandler } from '@module/account/use-cases/create-account-with-username/create-account-with-username.handler';
+import { AvatarFactory } from '@module/avatar/entities/__spec__/avatar.factory';
+import { Avatar } from '@module/avatar/entities/avatar.entity';
+import { AvatarService } from '@module/avatar/services/avatar-service/avatar.service';
+import { AVATAR_SERVICE } from '@module/avatar/services/avatar-service/avatar.service.interface';
+import { AvatarServiceModule } from '@module/avatar/services/avatar-service/avatar.service.module';
 import { NicknameSourceFactory } from '@module/nickname-source/entities/__spec__/nickname-source.factory';
 import { NicknameSource } from '@module/nickname-source/entities/nickname-source.entity';
 import {
@@ -27,6 +32,7 @@ describe(CreateAccountWithUsernameHandler.name, () => {
 
   let accountRepository: AccountRepositoryPort;
   let nicknameSourceService: INicknameSourceService;
+  let avatarService: AvatarService;
 
   let command: CreateAccountWithUsernameCommand;
 
@@ -34,6 +40,7 @@ describe(CreateAccountWithUsernameHandler.name, () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         NicknameSourceServiceModule,
+        AvatarServiceModule,
         ClsModuleFactory(),
         AccountRepositoryModule,
         EventStoreModule,
@@ -49,6 +56,7 @@ describe(CreateAccountWithUsernameHandler.name, () => {
     nicknameSourceService = module.get<INicknameSourceService>(
       NICKNAME_SOURCE_SERVICE,
     );
+    avatarService = module.get<AvatarService>(AVATAR_SERVICE);
   });
 
   beforeEach(() => {
@@ -56,11 +64,18 @@ describe(CreateAccountWithUsernameHandler.name, () => {
   });
 
   let nicknameSource: NicknameSource;
+  let avatar: Avatar;
   beforeEach(() => {
     nicknameSource = NicknameSourceFactory.build();
+    avatar = AvatarFactory.build();
+
     jest
       .spyOn(nicknameSourceService, 'issueNickname')
       .mockResolvedValue(nicknameSource);
+
+    jest
+      .spyOn(avatarService, 'assignRandomAvatar')
+      .mockResolvedValue({ avatarFileName: avatar.fileName });
   });
 
   describe('계정을 생성하면', () => {
@@ -71,6 +86,7 @@ describe(CreateAccountWithUsernameHandler.name, () => {
         expect.objectContaining({
           id: account.id,
           nickname: nicknameSource.fullname,
+          avatarFileName: avatar.fileName,
         }),
       );
     });

@@ -1,7 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { faker } from '@faker-js/faker';
-
 import { AccountFactory } from '@module/account/entities/__spec__/account.factory';
 import { SocialProvider } from '@module/account/entities/account.entity';
 import { SocialAccountAlreadyExistsError } from '@module/account/errors/social-account-already-exists.error';
@@ -13,7 +11,13 @@ import {
 import { CreateAccountWithGoogleCommandFactory } from '@module/account/use-cases/create-account-with-google/__spec__/create-account-with-google-command.factory';
 import { CreateAccountWithGoogleCommand } from '@module/account/use-cases/create-account-with-google/create-account-with-google.command';
 import { CreateAccountWithGoogleHandler } from '@module/account/use-cases/create-account-with-google/create-account-with-google.handler';
+import { AvatarFactory } from '@module/avatar/entities/__spec__/avatar.factory';
+import { Avatar } from '@module/avatar/entities/avatar.entity';
+import { AvatarService } from '@module/avatar/services/avatar-service/avatar.service';
+import { AVATAR_SERVICE } from '@module/avatar/services/avatar-service/avatar.service.interface';
+import { AvatarServiceModule } from '@module/avatar/services/avatar-service/avatar.service.module';
 import { NicknameSourceFactory } from '@module/nickname-source/entities/__spec__/nickname-source.factory';
+import { NicknameSource } from '@module/nickname-source/entities/nickname-source.entity';
 import {
   INicknameSourceService,
   NICKNAME_SOURCE_SERVICE,
@@ -33,6 +37,7 @@ describe(CreateAccountWithGoogleHandler.name, () => {
 
   let accountRepository: AccountRepositoryPort;
   let nicknameSourceService: INicknameSourceService;
+  let avatarService: AvatarService;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let eventStore: IEventStore;
 
@@ -44,6 +49,7 @@ describe(CreateAccountWithGoogleHandler.name, () => {
         ClsModuleFactory(),
         AccountRepositoryModule,
         NicknameSourceServiceModule,
+        AvatarServiceModule,
         EventStoreModule,
       ],
       providers: [CreateAccountWithGoogleHandler],
@@ -57,6 +63,7 @@ describe(CreateAccountWithGoogleHandler.name, () => {
     nicknameSourceService = module.get<INicknameSourceService>(
       NICKNAME_SOURCE_SERVICE,
     );
+    avatarService = module.get<AvatarService>(AVATAR_SERVICE);
     eventStore = module.get<IEventStore>(EVENT_STORE);
   });
 
@@ -64,12 +71,19 @@ describe(CreateAccountWithGoogleHandler.name, () => {
     command = CreateAccountWithGoogleCommandFactory.build();
   });
 
+  let nicknameSource: NicknameSource;
+  let avatar: Avatar;
   beforeEach(() => {
-    jest.spyOn(nicknameSourceService, 'issueNickname').mockResolvedValue(
-      NicknameSourceFactory.build({
-        name: faker.string.nanoid(3),
-      }),
-    );
+    nicknameSource = NicknameSourceFactory.build();
+    avatar = AvatarFactory.build();
+
+    jest
+      .spyOn(nicknameSourceService, 'issueNickname')
+      .mockResolvedValue(nicknameSource);
+
+    jest
+      .spyOn(avatarService, 'assignRandomAvatar')
+      .mockResolvedValue({ avatarFileName: avatar.fileName });
   });
 
   describe('구글 로그인을 사용하여 계정을 생성하면', () => {
@@ -77,7 +91,8 @@ describe(CreateAccountWithGoogleHandler.name, () => {
       await expect(handler.execute(command)).resolves.toEqual(
         expect.objectContaining({
           role: command.role,
-          nickname: expect.any(String),
+          nickname: nicknameSource.fullname,
+          avatarFileName: avatar.fileName,
           socialProviderUid: command.socialProviderUid,
           socialProvider: SocialProvider.google,
         }),
