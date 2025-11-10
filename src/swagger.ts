@@ -11,11 +11,26 @@ export class SwaggerConfig {
       .setDescription('The Quizzes Game IO Backend API')
       .setVersion('0.1')
       .addBearerAuth()
+      .addCookieAuth(
+        'access_token',
+        {
+          description: 'Access token stored in cookies',
+          type: 'http',
+          in: 'header',
+          name: 'cookie',
+        },
+        'cookie-auth',
+      )
       .build();
 
     const document = SwaggerModule.createDocument(app, config);
 
-    document.security = [{ bearer: [] }];
+    document.security = [
+      {
+        bearer: [],
+        'cookie-auth': [],
+      },
+    ];
 
     const GLOBAL_PREFIX = process.env.SWAGGER_GLOBAL_PREFIX;
 
