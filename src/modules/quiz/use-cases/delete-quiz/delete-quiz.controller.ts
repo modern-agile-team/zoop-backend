@@ -1,10 +1,4 @@
-import {
-  Controller,
-  Delete,
-  HttpStatus,
-  Param,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Delete, HttpStatus, Param } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { ApiNoContentResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
@@ -18,7 +12,6 @@ import {
   UnauthorizedError,
 } from '@common/base/base.error';
 import { ApiErrorResponse } from '@common/decorator/api-fail-response.decorator';
-import { AdminGuard } from '@common/guards/admin.guard';
 
 @ApiTags('quiz')
 @Controller()
@@ -33,7 +26,6 @@ export class DeleteQuizController {
     [HttpStatus.NOT_FOUND]: [QuizNotFoundError],
   })
   @ApiNoContentResponse()
-  @UseGuards(AdminGuard)
   @Delete('admin/quizzes/:quizId')
   async deleteQuizAdmin(@Param('quizId') quizId: string): Promise<void> {
     try {

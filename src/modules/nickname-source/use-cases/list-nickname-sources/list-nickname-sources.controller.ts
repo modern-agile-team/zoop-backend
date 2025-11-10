@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Query } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
@@ -15,7 +15,6 @@ import {
   UnauthorizedError,
 } from '@common/base/base.error';
 import { ApiErrorResponse } from '@common/decorator/api-fail-response.decorator';
-import { AdminGuard } from '@common/guards/admin.guard';
 
 @ApiTags('nickname-source')
 @Controller()
@@ -29,7 +28,6 @@ export class ListNicknameSourcesController {
     [HttpStatus.FORBIDDEN]: [PermissionDeniedError],
   })
   @ApiOkResponse({ type: NicknameSourceCollectionAdminDto })
-  @UseGuards(AdminGuard)
   @Get('admin/nickname-sources')
   async listNicknameSources(
     @Query() dto: ListNicknameSourcesAdminDto,

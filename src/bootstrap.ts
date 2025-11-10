@@ -16,6 +16,7 @@ import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 
 import { BaseHttpExceptionFilter } from '@common/base/base-http-exception.filter';
 import { RequestValidationError } from '@common/base/base.error';
+import { AdminGuard } from '@common/guards/admin.guard';
 
 import { LOGGER } from '@shared/logger/logger.module';
 
@@ -85,8 +86,9 @@ export const setLogger = (app: INestApplication) => {
 
 export const setGlobalGuard = (app: INestApplication) => {
   const jwtAuthGuard = app.get(JwtAuthGuard);
+  const adminGuard = app.get(AdminGuard);
 
-  app.useGlobalGuards(jwtAuthGuard);
+  app.useGlobalGuards(jwtAuthGuard, adminGuard);
 };
 
 export const setGlobalInterceptor = (app: INestApplication) => {

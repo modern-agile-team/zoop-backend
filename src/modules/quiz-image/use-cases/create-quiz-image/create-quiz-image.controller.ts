@@ -1,4 +1,4 @@
-import { Body, Controller, HttpStatus, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import {
   ApiConsumes,
@@ -22,7 +22,6 @@ import {
   UnauthorizedError,
 } from '@common/base/base.error';
 import { ApiErrorResponse } from '@common/decorator/api-fail-response.decorator';
-import { AdminGuard } from '@common/guards/admin.guard';
 
 @ApiTags('quiz-image')
 @Controller()
@@ -37,7 +36,6 @@ export class CreateQuizImageController {
     [HttpStatus.FORBIDDEN]: [PermissionDeniedError],
   })
   @ApiCreatedResponse({ type: QuizImageAdminDto })
-  @UseGuards(AdminGuard)
   @FormDataRequest()
   @Post('admin/quiz-images')
   async createQuizImageAdmin(

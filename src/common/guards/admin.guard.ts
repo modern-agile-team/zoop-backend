@@ -17,6 +17,11 @@ import {
 export class AdminGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest();
+
+    if (this.isAdminRoute(request.originalUrl) === false) {
+      return true;
+    }
+
     const user = request.user;
 
     if (!user) {
@@ -34,5 +39,11 @@ export class AdminGuard implements CanActivate {
     }
 
     return true;
+  }
+
+  private isAdminRoute(url: string): boolean {
+    const segments = url.split('/').filter((segment) => segment.length > 0);
+
+    return segments[0] === 'admin';
   }
 }

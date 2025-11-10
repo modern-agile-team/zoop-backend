@@ -4,7 +4,6 @@ import {
   HttpCode,
   HttpStatus,
   Param,
-  UseGuards,
 } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { ApiNoContentResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -20,7 +19,6 @@ import {
   UnauthorizedError,
 } from '@common/base/base.error';
 import { ApiErrorResponse } from '@common/decorator/api-fail-response.decorator';
-import { AdminGuard } from '@common/guards/admin.guard';
 
 @ApiTags('quiz-image')
 @Controller()
@@ -37,7 +35,6 @@ export class DeleteQuizImageController {
   })
   @ApiNoContentResponse()
   @HttpCode(HttpStatus.NO_CONTENT)
-  @UseGuards(AdminGuard)
   @Delete('admin/quiz-images/:quizImageId')
   async deleteQuizImage(@Param('quizImageId') quizImageId: string) {
     try {

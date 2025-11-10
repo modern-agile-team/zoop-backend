@@ -1,4 +1,4 @@
-import { Body, Controller, HttpStatus, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
@@ -16,7 +16,6 @@ import {
   UnauthorizedError,
 } from '@common/base/base.error';
 import { ApiErrorResponse } from '@common/decorator/api-fail-response.decorator';
-import { AdminGuard } from '@common/guards/admin.guard';
 
 @ApiTags('nickname-source')
 @Controller()
@@ -31,7 +30,6 @@ export class CreateNicknameSourceController {
     [HttpStatus.CONFLICT]: [NicknameSourceAlreadyExistsError],
   })
   @ApiCreatedResponse({ type: NicknameSourceAdminDto })
-  @UseGuards(AdminGuard)
   @Post('admin/nickname-sources')
   async createNicknameSourceAdmin(
     @Body() body: CreateNicknameSourceAdminDto,

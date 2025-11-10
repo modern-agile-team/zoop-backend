@@ -4,7 +4,6 @@ import {
   HttpStatus,
   ParseArrayPipe,
   Put,
-  UseGuards,
 } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -21,7 +20,6 @@ import {
   UnauthorizedError,
 } from '@common/base/base.error';
 import { ApiErrorResponse } from '@common/decorator/api-fail-response.decorator';
-import { AdminGuard } from '@common/guards/admin.guard';
 
 @ApiTags('quiz')
 @Controller()
@@ -36,7 +34,6 @@ export class CreateQuizzesController {
   })
   @ApiOkResponse({ type: [QuizAdminDto] })
   @ApiBody({ type: [CreateQuizzesAdminDto] })
-  @UseGuards(AdminGuard)
   @Put('admin/quizzes')
   async createQuizzesAdmin(
     @Body(new ParseArrayPipe({ items: CreateQuizzesAdminDto }))

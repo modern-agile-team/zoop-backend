@@ -4,7 +4,6 @@ import {
   HttpCode,
   HttpStatus,
   Param,
-  UseGuards,
 } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { ApiNoContentResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -20,7 +19,6 @@ import {
   UnauthorizedError,
 } from '@common/base/base.error';
 import { ApiErrorResponse } from '@common/decorator/api-fail-response.decorator';
-import { AdminGuard } from '@common/guards/admin.guard';
 
 @ApiTags('nickname-source')
 @Controller()
@@ -35,7 +33,6 @@ export class DeleteNicknameSourceController {
     [HttpStatus.NOT_FOUND]: [NicknameSourceNotFoundError],
   })
   @ApiNoContentResponse()
-  @UseGuards(AdminGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete('admin/nickname-sources/:nicknameSourceId')
   async deleteNicknameSource(
