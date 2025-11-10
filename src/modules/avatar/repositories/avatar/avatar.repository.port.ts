@@ -2,7 +2,11 @@ import { Avatar as AvatarModel } from '@prisma/client';
 
 import { Avatar } from '@module/avatar/entities/avatar.entity';
 
-import { RepositoryPort } from '@common/base/base.repository';
+import {
+  IOffsetPaginated,
+  ISort,
+  RepositoryPort,
+} from '@common/base/base.repository';
 
 export const AVATAR_REPOSITORY = Symbol('AVATAR_REPOSITORY');
 
@@ -12,5 +16,17 @@ export interface AvatarFilter {}
 
 export interface AvatarOrder {}
 
+export interface FindAllAvatarsOffsetPaginatedParams {
+  pageInfo: {
+    offset: number;
+    limit: number;
+  };
+  order?: ISort<'createdAt'>[];
+}
+
 export interface AvatarRepositoryPort
-  extends RepositoryPort<Avatar, AvatarFilter, AvatarOrder> {}
+  extends RepositoryPort<Avatar, AvatarFilter, AvatarOrder> {
+  findAllOffsetPaginated(
+    params: FindAllAvatarsOffsetPaginatedParams,
+  ): Promise<IOffsetPaginated<Avatar>>;
+}
