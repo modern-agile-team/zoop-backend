@@ -1,0 +1,121 @@
+import { TSID } from 'tsid-ts';
+
+import { AvatarCreatedEvent } from '@module/avatar/events/avatar-created.event';
+
+import {
+  AggregateRoot,
+  CreateEntityProps,
+  generateEntityId,
+} from '@common/base/base.entity';
+
+export interface AvatarProps {
+  fileName: string;
+  originalFileName: string;
+  name: string;
+  extension: string;
+  contentLength: string;
+  contentType: string;
+  width: number;
+  height: number;
+  description?: string;
+  usageCount: number;
+}
+
+interface CreateAvatarProps {
+  originalFileName: string;
+  name: string;
+  extension: string;
+  contentLength: string;
+  contentType: string;
+  width: number;
+  height: number;
+  description?: string;
+}
+
+export class Avatar extends AggregateRoot<AvatarProps> {
+  constructor(props: CreateEntityProps<AvatarProps>) {
+    super(props);
+  }
+
+  static create(props: CreateAvatarProps) {
+    const id = generateEntityId();
+    const date = new Date();
+
+    const avatar = new Avatar({
+      id,
+      props: {
+        name: props.name,
+        originalFileName: props.originalFileName,
+        extension: props.extension,
+        fileName: `${TSID.create().number.toString()}.${props.extension}`,
+        contentLength: props.contentLength,
+        contentType: props.contentType,
+        width: props.width,
+        height: props.height,
+        description: props.description,
+        usageCount: 0,
+      },
+      createdAt: date,
+      updatedAt: date,
+    });
+
+    avatar.apply(
+      new AvatarCreatedEvent(avatar.id, {
+        name: props.name,
+        originalFileName: props.originalFileName,
+        fileName: avatar.fileName,
+        extension: props.extension,
+        contentLength: props.contentLength,
+        contentType: props.contentType,
+        width: props.width,
+        height: props.height,
+        description: props.description,
+        usageCount: 0,
+      }),
+    );
+
+    return avatar;
+  }
+
+  get fileName(): string {
+    return this.props.fileName;
+  }
+
+  get originalFileName(): string {
+    return this.props.originalFileName;
+  }
+
+  get name(): string {
+    return this.props.name;
+  }
+
+  get extension(): string {
+    return this.props.extension;
+  }
+
+  get contentType(): string {
+    return this.props.contentType;
+  }
+
+  get contentLength(): string {
+    return this.props.contentLength;
+  }
+
+  get width(): number {
+    return this.props.width;
+  }
+
+  get height(): number {
+    return this.props.height;
+  }
+
+  get description(): string | undefined {
+    return this.props.description;
+  }
+
+  get usageCount(): number {
+    return this.props.usageCount;
+  }
+
+  public validate(): void {}
+}

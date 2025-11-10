@@ -58,5 +58,8 @@ jobs:
         if: steps.cache-node_modules.outputs.cache-hit != 'true'
         run: npm ci --no-audit --no-fund
 
+      - name: Generate prisma schema
+        run: npx prisma generate
+
       - name: Unit Test (Testcontainers will start Postgres/Redis)
         run: npm run test

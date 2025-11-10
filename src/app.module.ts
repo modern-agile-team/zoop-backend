@@ -7,6 +7,7 @@ import { AppGateway } from 'src/app.gateway';
 
 import { AccountModule } from '@module/account/account.module';
 import { AuthModule } from '@module/auth/auth.module';
+import { AvatarModule } from '@module/avatar/avatar.module';
 import { GameRoomModule } from '@module/game-room/game-room.module';
 import { NicknameSourceModule } from '@module/nickname-source/nickname-source.module';
 import { QuizImageModule } from '@module/quiz-image/quiz-image.module';
@@ -32,6 +33,7 @@ import { AccountSocketIndexStoreModule } from '@core/socket/index-store/account-
 
     AccountModule,
     AuthModule,
+    AvatarModule,
     GameRoomModule,
     NicknameSourceModule,
     QuizModule,
