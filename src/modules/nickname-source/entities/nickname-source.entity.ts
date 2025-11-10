@@ -67,13 +67,12 @@ export class NicknameSource extends AggregateRoot<NicknameSourceProps> {
     return `${this.name}${this.sequence}`;
   }
 
-  /**
-   * @todo updatedAt 갱신
-   */
   update(props: UpdateNicknameSourceProps) {
     if (props.name !== undefined) {
       this.props.name = props.name;
     }
+
+    this.updatedAt = new Date();
 
     this.apply(
       new NicknameSourceUpdatedEvent(this.id, {
