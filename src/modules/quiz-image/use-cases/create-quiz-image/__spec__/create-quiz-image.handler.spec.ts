@@ -74,6 +74,7 @@ describe(CreateQuizImageHandler.name, () => {
         category: command.category,
         extension: command.extension,
         contentLength: command.contentLength,
+        contentType: command.contentType,
         width: command.width,
         height: command.height,
       });

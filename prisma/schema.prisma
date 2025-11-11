@@ -180,6 +180,7 @@ model QuizImage {
   category         String
   extension        String
   contentLength    String
+  contentType      String
   width            Int
   height           Int
 

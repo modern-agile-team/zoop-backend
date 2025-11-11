@@ -16,6 +16,7 @@ export class QuizImageMapper extends BaseMapper {
         fileName: raw.fileName,
         extension: raw.extension,
         contentLength: raw.contentLength,
+        contentType: raw.contentType,
         width: raw.width,
         height: raw.height,
       },
@@ -33,6 +34,7 @@ export class QuizImageMapper extends BaseMapper {
       fileName: entity.fileName,
       extension: entity.extension,
       contentLength: entity.contentLength,
+      contentType: entity.contentType,
       width: entity.width,
       height: entity.height,
     };

@@ -7,6 +7,7 @@ export interface ICreateQuizImageCommandProps {
   originalFileName: string;
   extension: string;
   contentLength: string;
+  contentType: string;
   width: number;
   height: number;
 }
@@ -18,6 +19,7 @@ export class CreateQuizImageCommand implements ICommand {
   readonly originalFileName: string;
   readonly extension: string;
   readonly contentLength: string;
+  readonly contentType: string;
   readonly width: number;
   readonly height: number;
 
@@ -28,6 +30,7 @@ export class CreateQuizImageCommand implements ICommand {
     this.originalFileName = props.originalFileName;
     this.extension = props.extension;
     this.contentLength = props.contentLength;
+    this.contentType = props.contentType;
     this.width = props.width;
     this.height = props.height;
   }
