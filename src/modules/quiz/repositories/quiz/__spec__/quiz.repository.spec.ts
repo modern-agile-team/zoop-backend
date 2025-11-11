@@ -80,9 +80,25 @@ describe(QuizRepository, () => {
 
     describe('모든 퀴즈 목록을 조회하면', () => {
       it('모든 퀴즈 목록을 반환해야 한다.', async () => {
-        await expect(repository.findAll()).resolves.toEqual(
+        await expect(repository.findAll({})).resolves.toEqual(
           expect.arrayContaining(quizzes),
         );
+      });
+    });
+
+    describe('이미지 파일명으로 필터링하면', () => {
+      let targetQuiz: Quiz;
+
+      beforeEach(() => {
+        targetQuiz = quizzes[0];
+      });
+
+      it('해당 이미지 파일명을 가진 퀴즈 목록을 반환해야 한다.', async () => {
+        await expect(
+          repository.findAll({
+            filter: { imageFileName: targetQuiz.imageFileName as string },
+          }),
+        ).resolves.toEqual(expect.arrayContaining([targetQuiz]));
       });
     });
   });

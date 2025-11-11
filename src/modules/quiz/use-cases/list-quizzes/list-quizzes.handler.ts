@@ -17,8 +17,9 @@ export class ListQuizzesHandler
     private readonly quizRepository: QuizRepositoryPort,
   ) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async execute(query: ListQuizzesQuery): Promise<Quiz[]> {
-    return await this.quizRepository.findAll();
+    return await this.quizRepository.findAll({
+      filter: { imageFileName: query.imageFileName },
+    });
   }
 }

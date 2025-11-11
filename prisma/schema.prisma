@@ -154,6 +154,7 @@ model Quiz {
   createdAt DateTime @default(now()) @db.Timestamp(3)
   updatedAt DateTime @updatedAt @db.Timestamp(3)
 
+  @@index([imageFileName])
   @@map("quiz")
 }
 

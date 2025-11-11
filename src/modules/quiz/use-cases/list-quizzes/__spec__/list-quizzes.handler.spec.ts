@@ -32,7 +32,7 @@ describe(ListQuizzesHandler.name, () => {
   });
 
   beforeEach(() => {
-    query = ListQuizzesQueryFactory.build({ type: undefined });
+    query = ListQuizzesQueryFactory.build({ imageFileName: undefined });
   });
 
   beforeEach(async () => {
