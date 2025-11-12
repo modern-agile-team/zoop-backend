@@ -1,14 +1,8 @@
-import { Body, Controller, HttpStatus, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import {
-  ApiBearerAuth,
-  ApiCreatedResponse,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { AccountNotFoundError } from '@module/account/errors/account-not-found.error';
-import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 import { GameRoomDtoAssembler } from '@module/game-room/assemblers/game-room-dto.assembler';
 import { GameRoomDto } from '@module/game-room/dto/game-room.dto';
 import { GameRoom } from '@module/game-room/entities/game-room.entity';
@@ -27,7 +21,6 @@ import {
 } from '@common/decorator/current-user.decorator';
 
 @ApiTags('game-room')
-@ApiBearerAuth()
 @Controller('game-rooms')
 export class CreateGameRoomController {
   constructor(private readonly commandBus: CommandBus) {}
@@ -39,7 +32,6 @@ export class CreateGameRoomController {
     [HttpStatus.UNAUTHORIZED]: [UnauthorizedError],
     [HttpStatus.INTERNAL_SERVER_ERROR]: [AccountNotFoundError],
   })
-  @UseGuards(JwtAuthGuard)
   @Post()
   async createGameRoom(
     @CurrentUser() currentUser: ICurrentUser,

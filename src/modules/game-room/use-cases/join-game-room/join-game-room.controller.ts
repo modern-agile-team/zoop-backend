@@ -1,14 +1,8 @@
-import { Controller, HttpStatus, Param, Post, UseGuards } from '@nestjs/common';
+import { Controller, HttpStatus, Param, Post } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import {
-  ApiBearerAuth,
-  ApiCreatedResponse,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { AccountNotFoundError } from '@module/account/errors/account-not-found.error';
-import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 import { GameRoomMemberDtoAssembler } from '@module/game-room/assemblers/game-room-member-dto.assembler';
 import { GameRoomMemberDto } from '@module/game-room/dto/game-room-member.dto';
 import {
@@ -51,8 +45,6 @@ export class JoinGameRoomController {
     ],
     [HttpStatus.INTERNAL_SERVER_ERROR]: [AccountNotFoundError],
   })
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
   @Post('/game-room/:gameRoomId/members')
   async joinGameRoom(
     @Param('gameRoomId') gameRoomId: string,

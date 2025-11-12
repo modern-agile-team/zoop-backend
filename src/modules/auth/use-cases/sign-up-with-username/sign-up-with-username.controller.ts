@@ -1,6 +1,11 @@
 import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiCreatedResponse,
+  ApiOperation,
+  ApiSecurity,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { Response } from 'express';
 
@@ -8,6 +13,7 @@ import { AccountUsernameAlreadyOccupiedError } from '@module/account/errors/acco
 import { AuthTokenDtoAssembler } from '@module/auth/assemblers/auth-token-dto.assembler';
 import { AuthTokenDto } from '@module/auth/dto/auth-token.dto';
 import { AuthToken } from '@module/auth/entities/auth-token.vo';
+import { Public } from '@module/auth/jwt/jwt-auth.guard';
 import { SignUpWithUsernameCommand } from '@module/auth/use-cases/sign-up-with-username/sign-up-with-username.command';
 import { SignUpWithUsernameDto } from '@module/auth/use-cases/sign-up-with-username/sign-up-with-username.dto';
 
@@ -34,6 +40,7 @@ export class SignUpWithUsernameController {
   /**
    * @todo 프론트엔드에서 작업 완려되면 json 응답 제거
    */
+  @ApiSecurity({})
   @ApiOperation({ summary: 'username 기반 회원가입' })
   @ApiCreatedResponse({
     type: AuthTokenDto,
@@ -50,6 +57,7 @@ export class SignUpWithUsernameController {
     [HttpStatus.BAD_REQUEST]: [RequestValidationError],
     [HttpStatus.CONFLICT]: [AccountUsernameAlreadyOccupiedError],
   })
+  @Public()
   @Post('sign-up/username')
   async signUpWithUsername(
     @Body() body: SignUpWithUsernameDto,
@@ -69,7 +77,9 @@ export class SignUpWithUsernameController {
       res.cookie('access_token', authToken.accessToken, {
         secure: true,
         sameSite: 'none',
-        domain: this.ALLOW_COOKIE_DOMAIN,
+        domain: this.appConfigService.isProd()
+          ? this.ALLOW_COOKIE_DOMAIN
+          : undefined,
         httpOnly: true,
       });
 

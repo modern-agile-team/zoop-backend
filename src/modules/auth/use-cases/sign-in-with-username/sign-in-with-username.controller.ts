@@ -1,6 +1,11 @@
 import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiCreatedResponse,
+  ApiOperation,
+  ApiSecurity,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { Response } from 'express';
 
@@ -8,6 +13,7 @@ import { AuthTokenDtoAssembler } from '@module/auth/assemblers/auth-token-dto.as
 import { AuthTokenDto } from '@module/auth/dto/auth-token.dto';
 import { AuthToken } from '@module/auth/entities/auth-token.vo';
 import { SignInInfoNotMatchedError } from '@module/auth/errors/sign-in-info-not-matched.error';
+import { Public } from '@module/auth/jwt/jwt-auth.guard';
 import { SignInWithUsernameCommand } from '@module/auth/use-cases/sign-in-with-username/sign-in-with-username.command';
 import { SignInWithUsernameDto } from '@module/auth/use-cases/sign-in-with-username/sign-in-with-username.dto';
 
@@ -34,6 +40,7 @@ export class SignInWithUsernameController {
   /**
    * @todo 프론트엔드에서 작업 완려되면 json 응답 제거
    */
+  @ApiSecurity({})
   @ApiOperation({ summary: 'username 기반 로그인' })
   @ApiCreatedResponse({
     type: AuthTokenDto,
@@ -50,6 +57,7 @@ export class SignInWithUsernameController {
     [HttpStatus.BAD_REQUEST]: [RequestValidationError],
     [HttpStatus.UNAUTHORIZED]: [SignInInfoNotMatchedError],
   })
+  @Public()
   @Post('sign-in/username')
   async signInWithUsername(
     @Body() body: SignInWithUsernameDto,
@@ -69,7 +77,9 @@ export class SignInWithUsernameController {
       res.cookie('access_token', authToken.accessToken, {
         secure: true,
         sameSite: 'none',
-        domain: this.ALLOW_COOKIE_DOMAIN,
+        domain: this.appConfigService.isProd()
+          ? this.ALLOW_COOKIE_DOMAIN
+          : undefined,
         httpOnly: true,
       });
 

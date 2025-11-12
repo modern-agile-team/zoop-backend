@@ -1,13 +1,7 @@
-import { Controller, Get, HttpStatus, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Param } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
-import {
-  ApiBearerAuth,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 import { QuizDtoAssembler } from '@module/quiz/assemblers/quiz-dto.assembler';
 import { QuizAdminDto } from '@module/quiz/dto/quiz.admin-dto';
 import { Quiz } from '@module/quiz/entities/quiz.entity';
@@ -21,7 +15,6 @@ import {
   UnauthorizedError,
 } from '@common/base/base.error';
 import { ApiErrorResponse } from '@common/decorator/api-fail-response.decorator';
-import { AdminGuard } from '@common/guards/admin.guard';
 
 @ApiTags('quiz')
 @Controller()
@@ -29,14 +22,12 @@ export class GetQuizController {
   constructor(private readonly queryBus: QueryBus) {}
 
   @ApiOperation({ summary: '퀴즈 단일 조회' })
-  @ApiBearerAuth()
   @ApiErrorResponse({
     [HttpStatus.BAD_REQUEST]: [RequestValidationError],
     [HttpStatus.UNAUTHORIZED]: [UnauthorizedError],
     [HttpStatus.FORBIDDEN]: [PermissionDeniedError],
   })
   @ApiOkResponse({ type: QuizAdminDto })
-  @UseGuards(JwtAuthGuard, AdminGuard)
   @Get('admin/quizzes/:quizId')
   async getQuizzesAdmin(
     @Param('quizId') quizId: string,

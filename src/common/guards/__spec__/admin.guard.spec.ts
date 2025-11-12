@@ -12,17 +12,20 @@ import { AdminGuard } from '@common/guards/admin.guard';
 describe(AdminGuard.name, () => {
   const guard = new AdminGuard();
 
-  const createContext = (user: any): ExecutionContext => {
+  const createContext = (user: any, originalUrl: string): ExecutionContext => {
     return {
       switchToHttp: () => ({
-        getRequest: () => ({ user }),
+        getRequest: () => ({ user, originalUrl: originalUrl }),
       }),
     } as unknown as ExecutionContext;
   };
 
   describe('관리자 권한 유저가 요청하면', () => {
     it('요청이 허용돼야 한다.', () => {
-      const context = createContext({ role: AccountRole.admin });
+      const context = createContext(
+        { role: AccountRole.admin },
+        '/admin/some-resource',
+      );
 
       expect(guard.canActivate(context)).toBe(true);
     });
@@ -30,7 +33,7 @@ describe(AdminGuard.name, () => {
 
   describe('사용자 정보가 없는 경우', () => {
     it('Unauthorized 예외를 발생시켜야 한다.', () => {
-      const context = createContext(undefined);
+      const context = createContext(undefined, '/admin/some-resource');
 
       let thrownError: BaseHttpException | undefined;
 
@@ -47,7 +50,10 @@ describe(AdminGuard.name, () => {
 
   describe('관리자 권한이 아닌 유저가 요청하면', () => {
     it('PermissionDenied 예외를 발생시켜야 한다.', () => {
-      const context = createContext({ role: AccountRole.user });
+      const context = createContext(
+        { role: AccountRole.user },
+        '/admin/some-resource',
+      );
 
       let thrownError: BaseHttpException | undefined;
 
@@ -59,6 +65,17 @@ describe(AdminGuard.name, () => {
 
       expect(thrownError).toBeInstanceOf(BaseHttpException);
       expect(thrownError?.error).toBeInstanceOf(PermissionDeniedError);
+    });
+  });
+
+  describe('어드민 API가 아닌 경우', () => {
+    it('요청이 허용돼야 한다.', () => {
+      const context = createContext(
+        { role: AccountRole.user },
+        '/some-public-resource',
+      );
+
+      expect(guard.canActivate(context)).toBe(true);
     });
   });
 });

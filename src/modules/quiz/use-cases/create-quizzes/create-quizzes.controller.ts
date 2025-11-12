@@ -4,18 +4,10 @@ import {
   HttpStatus,
   ParseArrayPipe,
   Put,
-  UseGuards,
 } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 import { QuizDtoAssembler } from '@module/quiz/assemblers/quiz-dto.assembler';
 import { QuizAdminDto } from '@module/quiz/dto/quiz.admin-dto';
 import { Quiz } from '@module/quiz/entities/quiz.entity';
@@ -28,18 +20,13 @@ import {
   UnauthorizedError,
 } from '@common/base/base.error';
 import { ApiErrorResponse } from '@common/decorator/api-fail-response.decorator';
-import { AdminGuard } from '@common/guards/admin.guard';
 
 @ApiTags('quiz')
 @Controller()
 export class CreateQuizzesController {
   constructor(private readonly commandBus: CommandBus) {}
 
-  @ApiErrorResponse({
-    [HttpStatus.BAD_REQUEST]: [RequestValidationError],
-  })
   @ApiOperation({ summary: '퀴즈 대량 생성' })
-  @ApiBearerAuth()
   @ApiErrorResponse({
     [HttpStatus.BAD_REQUEST]: [RequestValidationError],
     [HttpStatus.UNAUTHORIZED]: [UnauthorizedError],
@@ -47,7 +34,6 @@ export class CreateQuizzesController {
   })
   @ApiOkResponse({ type: [QuizAdminDto] })
   @ApiBody({ type: [CreateQuizzesAdminDto] })
-  @UseGuards(JwtAuthGuard, AdminGuard)
   @Put('admin/quizzes')
   async createQuizzesAdmin(
     @Body(new ParseArrayPipe({ items: CreateQuizzesAdminDto }))

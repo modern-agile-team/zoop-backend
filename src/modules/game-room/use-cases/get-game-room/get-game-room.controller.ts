@@ -1,21 +1,8 @@
-import {
-  Controller,
-  Get,
-  HttpStatus,
-  Inject,
-  Param,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, HttpStatus, Inject, Param } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
-import {
-  ApiBearerAuth,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { AccountNotFoundError } from '@module/account/errors/account-not-found.error';
-import { JwtAuthGuard } from '@module/auth/jwt/jwt-auth.guard';
 import { GameRoomDtoAssembler } from '@module/game-room/assemblers/game-room-dto.assembler';
 import { GameRoomDto } from '@module/game-room/dto/game-room.dto';
 import { GameRoom } from '@module/game-room/entities/game-room.entity';
@@ -36,7 +23,6 @@ import {
 } from '@common/decorator/current-user.decorator';
 
 @ApiTags('game-room')
-@ApiBearerAuth()
 @Controller()
 export class GetGameRoomController {
   constructor(
@@ -46,14 +32,12 @@ export class GetGameRoomController {
   ) {}
 
   @ApiOperation({ summary: '게임 방 상세 조회' })
-  @ApiBearerAuth()
   @ApiOkResponse({ type: GameRoomDto })
   @ApiErrorResponse({
     [HttpStatus.UNAUTHORIZED]: [UnauthorizedError],
     [HttpStatus.FORBIDDEN]: [GameRoomAccessDeniedError],
     [HttpStatus.NOT_FOUND]: [GameRoomNotFoundError],
   })
-  @UseGuards(JwtAuthGuard)
   @Get('game-rooms/:gameRoomId')
   async getGameRoom(
     @Param('gameRoomId') gameRoomId: string,
