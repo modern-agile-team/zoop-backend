@@ -53,4 +53,34 @@ describe(SoundEffectRepository, () => {
       });
     });
   });
+
+  describe(SoundEffectRepository.prototype.findAllOffsetPaginated, () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    let soundEffects: SoundEffect[];
+
+    beforeEach(async () => {
+      soundEffects = await Promise.all(
+        SoundEffectFactory.buildList(5).map((soundEffect) =>
+          repository.insert(soundEffect),
+        ),
+      );
+    });
+
+    describe('페이지를 조회하면', () => {
+      it('페이지가 반환되어야한다.', async () => {
+        await expect(
+          repository.findAllOffsetPaginated({
+            pageInfo: { offset: 0, limit: 2 },
+          }),
+        ).resolves.toEqual({
+          data: expect.toSatisfyAll(
+            (soundEffect: unknown) => soundEffect instanceof SoundEffect,
+          ),
+          limit: expect.any(Number),
+          offset: expect.any(Number),
+          totalCount: expect.any(Number),
+        });
+      });
+    });
+  });
 });
