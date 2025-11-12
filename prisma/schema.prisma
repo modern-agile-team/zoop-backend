@@ -204,6 +204,37 @@ model QuizImageEventStore {
   @@map("quiz_image_event_store")
 }
 
+model SoundEffect {
+  id BigInt @id
+
+  fileName         String
+  originalFileName String
+  name             String
+  extension        String
+  contentLength    String
+  contentType      String
+  description      String?
+
+  createdAt DateTime @default(now()) @db.Timestamp(3)
+  updatedAt DateTime @updatedAt @db.Timestamp(3)
+
+  @@index(fileName)
+  @@map("sound_effect")
+}
+
+model SoundEffectEventStore {
+  id           BigInt   @id
+  actorId      BigInt?
+  aggregateId  BigInt
+  eventName    String
+  eventPayload Json
+  version      Int
+  storedAt     DateTime @default(now()) @db.Timestamp(3)
+
+  @@unique([aggregateId, version])
+  @@map("sound_effect_event_store")
+}
+
 model Avatar {
   id BigInt @id
 

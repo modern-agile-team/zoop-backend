@@ -2,7 +2,7 @@ import { ENV_KEY } from '@common/app-config/app-config.constant';
 
 import { InvalidAssetUrlError } from '@shared/asset/errors/invalid-asset-url.error';
 
-export type AssetCategory = 'quizImage' | 'avatar';
+export type AssetCategory = 'quizImage' | 'soundEffect' | 'avatar';
 
 export class AssetUrlManager {
   private static readonly BASE_ASSET_URL = process.env[
@@ -11,6 +11,7 @@ export class AssetUrlManager {
   private static readonly BASE_ASSET_FILE_PATH: Record<AssetCategory, string> =
     {
       quizImage: process.env[ENV_KEY.AWS_S3_QUIZ_IMAGE_FILE_PATH] as string,
+      soundEffect: process.env[ENV_KEY.AWS_S3_SOUND_EFFECT_FILE_PATH] as string,
       avatar: process.env[ENV_KEY.AWS_S3_AVATAR_FILE_PATH] as string,
     };
 

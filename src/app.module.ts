@@ -12,6 +12,7 @@ import { GameRoomModule } from '@module/game-room/game-room.module';
 import { NicknameSourceModule } from '@module/nickname-source/nickname-source.module';
 import { QuizImageModule } from '@module/quiz-image/quiz-image.module';
 import { QuizModule } from '@module/quiz/quiz.module';
+import { SoundEffectModule } from '@module/sound-effect/sound-effect.module';
 
 import { AppConfigModule } from '@common/app-config/app-config.module';
 import { ClsModuleFactory } from '@common/factories/cls-module.factory';
@@ -38,6 +39,7 @@ import { AccountSocketIndexStoreModule } from '@core/socket/index-store/account-
     NicknameSourceModule,
     QuizModule,
     QuizImageModule,
+    SoundEffectModule,
   ],
   providers: [AppGateway],
 })

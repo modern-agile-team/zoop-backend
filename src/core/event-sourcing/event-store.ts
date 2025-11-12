@@ -86,6 +86,9 @@ export class EventStore implements IEventStore {
     if (aggregate === 'NicknameSource') {
       return this.txHost.tx.nicknameSourceEventStore;
     }
+    if (aggregate === 'SoundEffect') {
+      return this.txHost.tx.soundEffectEventStore;
+    }
     if (aggregate === 'Avatar') {
       return this.txHost.tx.avatarEventStore;
     }

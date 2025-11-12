@@ -7,6 +7,7 @@ type Aggregate =
   | 'QuizImage'
   | 'Quiz'
   | 'NicknameSource'
+  | 'SoundEffect'
   | 'Avatar';
 
 /**
