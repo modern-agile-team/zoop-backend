@@ -1,0 +1,15 @@
+[
+  {
+    "id": "775587825319787807",
+    "category": "string",
+    "name": "목 시딩용",
+    "originalFileName": "zoop.jpeg",
+    "quizImageFileName": "775587825319787808.jpg",
+    "quizImageUrl": "https://dev-zoop.s3.ap-northeast-2.amazonaws.com/quiz-images/775587825319787808.jpg",
+    "extension": "jpg",
+    "contentType": "image/jpg",
+    "contentLength": 5100,
+    "width": 225,
+    "height": 225
+  }
+]
