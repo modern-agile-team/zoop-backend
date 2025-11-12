@@ -24,6 +24,6 @@ export class SoundEffectAdminDto extends BaseResponseDto {
   @ApiProperty()
   contentLength: number;
 
-  @ApiProperty({ required: false })
-  description?: string;
+  @ApiProperty({ nullable: true })
+  description: string | null;
 }
