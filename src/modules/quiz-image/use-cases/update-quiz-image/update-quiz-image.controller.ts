@@ -8,7 +8,6 @@ import { QuizImage } from '@module/quiz-image/entities/quiz-image.entity';
 import { QuizImageNotFoundError } from '@module/quiz-image/errors/quiz-image-not-found.error';
 import { UpdateQuizImageAdminDto } from '@module/quiz-image/use-cases/update-quiz-image/update-quiz-image.admin-dto';
 import { UpdateQuizImageCommand } from '@module/quiz-image/use-cases/update-quiz-image/update-quiz-image.command';
-import { QuizAdminDto } from '@module/quiz/dto/quiz.admin-dto';
 
 import { BaseHttpException } from '@common/base/base-http-exception';
 import {
@@ -30,7 +29,7 @@ export class UpdateQuizImageController {
     [HttpStatus.FORBIDDEN]: [PermissionDeniedError],
     [HttpStatus.NOT_FOUND]: [QuizImageNotFoundError],
   })
-  @ApiOkResponse({ type: QuizAdminDto })
+  @ApiOkResponse({ type: QuizImageAdminDto })
   @Patch('admin/quiz-images/:quizImageId')
   async updateQuizImageAdmin(
     @Param('quizImageId') quizImageId: string,
