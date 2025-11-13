@@ -30,6 +30,7 @@ export interface AccountProps {
   username?: string;
   password?: string;
   nickname: string;
+  avatarFileName: string;
   enteredAt?: Date;
   leftAt?: Date;
   isActive: boolean;
@@ -40,6 +41,7 @@ interface CreateAccountWithUsernameProps {
   role: AccountRole;
   signInType: SignInType;
   nickname: string;
+  avatarFileName: string;
   username?: string;
   password?: string;
 }
@@ -48,6 +50,7 @@ interface CreateAccountWithGoogleProps {
   role: AccountRole;
   socialProviderUid?: string;
   nickname: string;
+  avatarFileName: string;
 }
 
 export class Account extends AggregateRoot<AccountProps> {
@@ -67,6 +70,7 @@ export class Account extends AggregateRoot<AccountProps> {
         username: props.username,
         password: props.password,
         nickname: props.nickname,
+        avatarFileName: props.avatarFileName,
         isActive: false,
       },
       createdAt: date,
@@ -80,6 +84,7 @@ export class Account extends AggregateRoot<AccountProps> {
         username: props.username,
         password: props.password,
         nickname: account.props.nickname,
+        avatarFileName: props.avatarFileName,
       }),
     );
 
@@ -98,6 +103,7 @@ export class Account extends AggregateRoot<AccountProps> {
         socialProvider: SocialProvider.google,
         socialProviderUid: props.socialProviderUid,
         nickname: props.nickname,
+        avatarFileName: props.avatarFileName,
         isActive: false,
       },
       createdAt: date,
@@ -111,6 +117,7 @@ export class Account extends AggregateRoot<AccountProps> {
         socialProvider: SocialProvider.google,
         socialProviderUid: props.socialProviderUid,
         nickname: account.props.nickname,
+        avatarFileName: props.avatarFileName,
       }),
     );
 
@@ -145,6 +152,10 @@ export class Account extends AggregateRoot<AccountProps> {
 
   get nickname(): string {
     return this.props.nickname;
+  }
+
+  get avatarFileName(): string {
+    return this.props.avatarFileName;
   }
 
   get enteredAt(): Date | undefined {

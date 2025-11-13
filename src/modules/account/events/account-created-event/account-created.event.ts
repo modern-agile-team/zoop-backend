@@ -14,6 +14,7 @@ interface AccountCreatedEventPayload {
   username?: string;
   password?: string;
   nickname: string;
+  avatarFileName: string;
 }
 
 export class AccountCreatedEvent extends DomainEvent<AccountCreatedEventPayload> {

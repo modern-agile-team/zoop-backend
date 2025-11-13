@@ -21,7 +21,7 @@ export interface FindAllAvatarsOffsetPaginatedParams {
     offset: number;
     limit: number;
   };
-  order?: ISort<'createdAt'>[];
+  order?: ISort<'createdAt' | 'usageCount'>[];
 }
 
 export interface AvatarRepositoryPort

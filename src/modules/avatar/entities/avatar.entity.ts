@@ -1,5 +1,6 @@
 import { TSID } from 'tsid-ts';
 
+import { AvatarAssignedEvent } from '@module/avatar/events/avatar-assigned.event';
 import { AvatarCreatedEvent } from '@module/avatar/events/avatar-created.event';
 import { AvatarUpdatedEvent } from '@module/avatar/events/avatar-updated-event';
 
@@ -121,6 +122,18 @@ export class Avatar extends AggregateRoot<AvatarProps> {
 
   get usageCount(): number {
     return this.props.usageCount;
+  }
+
+  assign() {
+    this.props.usageCount += 1;
+    this.updatedAt = new Date();
+
+    this.apply(
+      new AvatarAssignedEvent(this.id, {
+        avatarId: this.id,
+        usageCount: this.props.usageCount,
+      }),
+    );
   }
 
   update(props: UpdateAvatarProps) {

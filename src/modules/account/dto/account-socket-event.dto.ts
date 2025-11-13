@@ -6,4 +6,7 @@ export class AccountSocketEventDto {
 
   @ApiProperty()
   nickname: string;
+
+  @ApiProperty()
+  avatarUrl: string;
 }

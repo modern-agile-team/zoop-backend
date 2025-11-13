@@ -2,6 +2,8 @@ import { AccountSocketEventDto } from '@module/account/dto/account-socket-event.
 import { AccountDto } from '@module/account/dto/account.dto';
 import { Account } from '@module/account/entities/account.entity';
 
+import { AssetUrlManager } from '@shared/asset/asset-url.manager';
+
 export class AccountDtoAssembler {
   static convertToDto(account: Account): AccountDto {
     const dto = new AccountDto({
@@ -13,6 +15,11 @@ export class AccountDtoAssembler {
     dto.role = account.role;
     dto.signInType = account.signInType;
     dto.nickname = account.nickname;
+    dto.avatarFileName = account.avatarFileName;
+    dto.avatarUrl = AssetUrlManager.fileNameToUrl(
+      account.avatarFileName,
+      'avatar',
+    );
     dto.enteredAt = account.enteredAt;
     dto.leftAt = account.leftAt;
     dto.isActive = account.isActive;
@@ -25,6 +32,10 @@ export class AccountDtoAssembler {
 
     dto.accountId = account.id;
     dto.nickname = account.nickname;
+    dto.avatarUrl = AssetUrlManager.fileNameToUrl(
+      account.avatarFileName,
+      'avatar',
+    );
 
     return dto;
   }

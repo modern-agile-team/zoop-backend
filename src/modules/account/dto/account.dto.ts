@@ -23,6 +23,12 @@ export class AccountDto extends BaseResponseDto {
   @ApiProperty()
   nickname: string;
 
+  @ApiProperty()
+  avatarFileName: string;
+
+  @ApiProperty()
+  avatarUrl: string;
+
   @ApiProperty({
     description: '진입 시점',
   })

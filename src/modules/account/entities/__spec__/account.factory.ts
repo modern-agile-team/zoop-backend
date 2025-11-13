@@ -23,6 +23,7 @@ export const AccountFactory = Factory.define<Account & AccountProps>(
     username: () => generateEntityId(),
     password: () => faker.internet.password(),
     nickname: () => generateEntityId(),
+    avatarFileName: () => faker.string.nanoid(),
     enteredAt: () => faker.date.past(),
     leftAt: () => faker.date.future(),
     isActive: () => faker.datatype.boolean(),

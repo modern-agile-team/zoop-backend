@@ -14,6 +14,10 @@ import {
 } from '@module/account/repositories/account/account.repository.port';
 import { CreateAccountWithGoogleCommand } from '@module/account/use-cases/create-account-with-google/create-account-with-google.command';
 import {
+  AVATAR_SERVICE,
+  IAvatarService,
+} from '@module/avatar/services/avatar-service/avatar.service.interface';
+import {
   INicknameSourceService,
   NICKNAME_SOURCE_SERVICE,
 } from '@module/nickname-source/services/nickname-source-service/nickname-source.service.interface';
@@ -32,6 +36,8 @@ export class CreateAccountWithGoogleHandler
     private readonly accountRepository: AccountRepositoryPort,
     @Inject(NICKNAME_SOURCE_SERVICE)
     private readonly nicknameSourceService: INicknameSourceService,
+    @Inject(AVATAR_SERVICE)
+    private readonly avatarService: IAvatarService,
     @Inject(EVENT_STORE) private readonly eventStore: IEventStore,
   ) {}
 
@@ -48,11 +54,13 @@ export class CreateAccountWithGoogleHandler
     }
 
     const nicknameSource = await this.nicknameSourceService.issueNickname();
+    const { avatarFileName } = await this.avatarService.assignRandomAvatar();
 
     const account = Account.createAccountWithGoogle({
       role: command.role,
       socialProviderUid: command.socialProviderUid,
       nickname: nicknameSource.fullname,
+      avatarFileName,
     });
 
     await this.accountRepository.insert(account);
