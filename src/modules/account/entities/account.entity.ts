@@ -42,8 +42,8 @@ interface CreateAccountWithUsernameProps {
   signInType: SignInType;
   nickname: string;
   avatarFileName: string;
-  username?: string;
-  password?: string;
+  username: string;
+  password: string;
 }
 
 interface CreateAccountWithGoogleProps {
@@ -69,8 +69,8 @@ export class Account extends AggregateRoot<AccountProps> {
         signInType: props.signInType,
         socialProvider: null,
         socialProviderUid: null,
-        username: props.username ?? null,
-        password: props.password ?? null,
+        username: props.username,
+        password: props.password,
         nickname: props.nickname,
         avatarFileName: props.avatarFileName,
         isActive: false,
