@@ -21,7 +21,7 @@ export class SoundEffectDtoAssembler {
     dto.extension = soundEffect.extension;
     dto.contentType = soundEffect.contentType;
     dto.contentLength = Number(soundEffect.contentLength);
-    dto.description = soundEffect.description;
+    dto.description = soundEffect.description ?? null;
 
     return dto;
   }

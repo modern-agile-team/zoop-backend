@@ -1,6 +1,7 @@
 import { TSID } from 'tsid-ts';
 
 import { SoundEffectCreatedEvent } from '@module/sound-effect/events/sound-effect-created.event';
+import { SoundEffectUpdatedEvent } from '@module/sound-effect/events/sound-effect-updated.event';
 
 import {
   AggregateRoot,
@@ -15,7 +16,7 @@ export interface SoundEffectProps {
   extension: string;
   contentLength: string;
   contentType: string;
-  description?: string;
+  description?: string | null;
 }
 
 interface CreateSoundEffectProps {
@@ -25,6 +26,11 @@ interface CreateSoundEffectProps {
   contentLength: string;
   contentType: string;
   description?: string;
+}
+
+interface UpdateSoundEffectProps {
+  name?: string;
+  description?: string | null;
 }
 
 export class SoundEffect extends AggregateRoot<SoundEffectProps> {
@@ -54,12 +60,12 @@ export class SoundEffect extends AggregateRoot<SoundEffectProps> {
     soundEffect.apply(
       new SoundEffectCreatedEvent(soundEffect.id, {
         fileName: soundEffect.fileName,
-        originalFileName: soundEffect.originalFileName,
-        name: soundEffect.name,
-        extension: soundEffect.extension,
-        contentLength: soundEffect.contentLength,
-        contentType: soundEffect.contentType,
-        description: soundEffect.description,
+        originalFileName: props.originalFileName,
+        name: props.name,
+        extension: props.extension,
+        contentLength: props.contentLength,
+        contentType: props.contentType,
+        description: props.description,
       }),
     );
 
@@ -90,8 +96,27 @@ export class SoundEffect extends AggregateRoot<SoundEffectProps> {
     return this.props.contentLength;
   }
 
-  get description(): string | undefined {
+  get description(): string | undefined | null {
     return this.props.description;
+  }
+
+  update(props: UpdateSoundEffectProps) {
+    if (props.name !== undefined) {
+      this.props.name = props.name;
+    }
+
+    if (props.description !== undefined) {
+      this.props.description = props.description;
+    }
+
+    this.updatedAt = new Date();
+
+    this.apply(
+      new SoundEffectUpdatedEvent(this.id, {
+        name: props.name,
+        description: props.description,
+      }),
+    );
   }
 
   public validate(): void {}
