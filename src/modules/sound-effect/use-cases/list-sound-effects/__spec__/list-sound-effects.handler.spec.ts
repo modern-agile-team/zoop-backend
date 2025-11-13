@@ -34,7 +34,7 @@ describe(ListSoundEffectsHandler.name, () => {
   });
 
   beforeEach(() => {
-    query = ListSoundEffectsQueryFactory.build({ page: 1 });
+    query = ListSoundEffectsQueryFactory.build({ page: 1, perPage: 20 });
   });
 
   describe('효과음 페이지를 조회하면', () => {

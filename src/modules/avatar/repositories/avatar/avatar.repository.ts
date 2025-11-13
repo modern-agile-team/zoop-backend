@@ -13,12 +13,14 @@ import {
   AvatarOrder,
   AvatarRaw,
   AvatarRepositoryPort,
+  FindAllAvatarsOffsetPaginatedParams,
 } from '@module/avatar/repositories/avatar/avatar.repository.port';
 
 import {
   BaseRepository,
   ICursorPaginated,
   ICursorPaginatedParams,
+  IOffsetPaginated,
 } from '@common/base/base.repository';
 
 @Injectable()
@@ -33,6 +35,30 @@ export class AvatarRepository
     protected readonly txHost: TransactionHost<TransactionalAdapterPrisma>,
   ) {
     super(txHost, AvatarMapper);
+  }
+
+  async findAllOffsetPaginated(
+    params: FindAllAvatarsOffsetPaginatedParams,
+  ): Promise<IOffsetPaginated<Avatar>> {
+    const { pageInfo } = params;
+
+    const [avatars, totalCount] = await Promise.all([
+      this.txHost.tx.avatar.findMany({
+        skip: pageInfo.offset,
+        take: pageInfo.limit,
+        orderBy: this.toOrderBy(
+          params.order ?? [{ field: 'id', direction: 'asc' }],
+        ),
+      }),
+      this.txHost.tx.avatar.count({}),
+    ]);
+
+    return {
+      offset: pageInfo.offset,
+      limit: pageInfo.limit,
+      totalCount: totalCount,
+      data: avatars.map((avatar) => this.mapper.toEntity(avatar)),
+    };
   }
 
   findAllCursorPaginated(

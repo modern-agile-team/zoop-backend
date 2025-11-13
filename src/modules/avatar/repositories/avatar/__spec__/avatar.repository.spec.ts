@@ -51,4 +51,32 @@ describe(AvatarRepository, () => {
       });
     });
   });
+
+  describe(AvatarRepository.prototype.findAllOffsetPaginated, () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    let avatar: Avatar[];
+
+    beforeEach(async () => {
+      avatar = await Promise.all(
+        AvatarFactory.buildList(5).map((avatar) => repository.insert(avatar)),
+      );
+    });
+
+    describe('페이지를 조회하면', () => {
+      it('페이지가 반환되어야한다.', async () => {
+        await expect(
+          repository.findAllOffsetPaginated({
+            pageInfo: { offset: 0, limit: 2 },
+          }),
+        ).resolves.toEqual({
+          data: expect.toSatisfyAll(
+            (avatar: unknown) => avatar instanceof Avatar,
+          ),
+          limit: expect.any(Number),
+          offset: expect.any(Number),
+          totalCount: expect.any(Number),
+        });
+      });
+    });
+  });
 });
