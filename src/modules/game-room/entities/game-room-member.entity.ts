@@ -13,12 +13,14 @@ export interface GameRoomMemberProps {
   accountId: string;
   role: GameRoomMemberRole;
   nickname: string;
+  avatarFileName: string;
 }
 
 interface CreateGameRoomMemberProps {
   accountId: string;
   role: GameRoomMemberRole;
   nickname: string;
+  avatarFileName: string;
 }
 
 export class GameRoomMember extends BaseEntity<GameRoomMemberProps> {
@@ -36,6 +38,7 @@ export class GameRoomMember extends BaseEntity<GameRoomMemberProps> {
         accountId: props.accountId,
         role: props.role,
         nickname: props.nickname,
+        avatarFileName: props.avatarFileName,
       },
       createdAt: date,
       updatedAt: date,
@@ -52,6 +55,10 @@ export class GameRoomMember extends BaseEntity<GameRoomMemberProps> {
 
   get nickname(): string {
     return this.props.nickname;
+  }
+
+  get avatarFileName(): string {
+    return this.props.avatarFileName;
   }
 
   changeRole(role: GameRoomMemberRole) {

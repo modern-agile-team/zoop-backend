@@ -52,6 +52,7 @@ export class CreateGameRoomHandler
       hostAccountId: command.currentAccountId,
       hostNickname: existingAccount.nickname,
       quizTimeLimitInSeconds: GameRoom.DEFAULT_QUIZ_TIME_LIMIT_IN_SECONDS,
+      hostAvatarFileName: existingAccount.avatarFileName,
     });
 
     await this.gameRoomRepository.insert(gameRoom);

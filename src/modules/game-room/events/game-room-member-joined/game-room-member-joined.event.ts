@@ -7,6 +7,7 @@ interface GameRoomMemberJoinedEventPayload {
   accountId: string;
   role: GameRoomMemberRole;
   nickname: string;
+  avatarFileName: string;
 }
 
 export class GameRoomMemberJoinedEvent extends DomainEvent<GameRoomMemberJoinedEventPayload> {

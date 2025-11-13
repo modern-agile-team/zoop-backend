@@ -7,6 +7,7 @@ namespace PrismaJson {
     accountId: bigint;
     role: GameRoomMemberRole;
     nickname: string;
+    avatarFileName: string;
     createdAt: string;
     updatedAt: string;
   };

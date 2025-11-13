@@ -66,6 +66,7 @@ describe(GameRoomMemberJoinedHandler, () => {
       accountId: generateEntityId(),
       role: GameRoomMemberRole.player,
       nickname: generateEntityId(),
+      avatarFileName: 'avatarFileName',
     });
   });
 

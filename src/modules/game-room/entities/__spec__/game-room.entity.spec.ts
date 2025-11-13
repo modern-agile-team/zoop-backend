@@ -34,6 +34,7 @@ describe(GameRoom, () => {
         quizzesCount: 5,
         hostAccountId: generateEntityId(),
         hostNickname: 'nickname',
+        hostAvatarFileName: 'avatarFileName',
       };
     });
 
