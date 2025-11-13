@@ -55,6 +55,20 @@ export class AccountRepository
     return accounts.map((account) => this.mapper.toEntity(account));
   }
 
+  async findManyByAvatarFileNames(
+    avatarFileName: Set<string>,
+  ): Promise<Account[]> {
+    const accounts = await this.txHost.tx.account.findMany({
+      where: {
+        avatarFileName: {
+          in: Array.from(avatarFileName),
+        },
+      },
+    });
+
+    return accounts.map((account) => this.mapper.toEntity(account));
+  }
+
   async findOneByUsername(username: string): Promise<Account | undefined> {
     const account = await this.txHost.tx.account.findFirst({
       where: {

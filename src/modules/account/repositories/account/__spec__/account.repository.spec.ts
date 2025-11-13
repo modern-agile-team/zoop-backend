@@ -89,6 +89,29 @@ describe(AccountRepository, () => {
     });
   });
 
+  describe(AccountRepository.prototype.findManyByAvatarFileNames, () => {
+    let avatarFileNames: Set<string>;
+    let accounts: Account[];
+
+    beforeEach(async () => {
+      avatarFileNames = new Set<string>();
+      accounts = await Promise.all(
+        AccountFactory.buildList(3).map((account) => {
+          avatarFileNames.add(account.avatarFileName as string);
+          return repository.insert(account);
+        }),
+      );
+    });
+
+    describe('이미지 파일명 리스트를 주면', () => {
+      it('이미지 파일명에 맞는 퀴즈 목록을 반환해야 한다.', async () => {
+        await expect(
+          repository.findManyByAvatarFileNames(avatarFileNames),
+        ).resolves.toEqual(expect.arrayContaining(accounts));
+      });
+    });
+  });
+
   describe(AccountRepository.prototype.findOneByUsername, () => {
     let username: string;
 
