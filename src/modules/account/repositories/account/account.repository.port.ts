@@ -20,6 +20,7 @@ export interface AccountOrder {}
 export interface AccountRepositoryPort
   extends RepositoryPort<Account, AccountFilter, AccountOrder> {
   findAllBy(options: { filter: AccountFilter }): Promise<Account[]>;
+  findManyByAvatarFileNames(avatarFileName: Set<string>): Promise<Account[]>;
   findOneByUsername(username: string): Promise<Account | undefined>;
   findOneByNickname(nickname: string): Promise<Account | undefined>;
   findOneBySocialId(

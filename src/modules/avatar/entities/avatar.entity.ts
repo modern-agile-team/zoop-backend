@@ -2,6 +2,7 @@ import { TSID } from 'tsid-ts';
 
 import { AvatarAssignedEvent } from '@module/avatar/events/avatar-assigned.event';
 import { AvatarCreatedEvent } from '@module/avatar/events/avatar-created.event';
+import { AvatarDeletedEvent } from '@module/avatar/events/avatar-deleted-event';
 import { AvatarUpdatedEvent } from '@module/avatar/events/avatar-updated-event';
 
 import {
@@ -151,6 +152,14 @@ export class Avatar extends AggregateRoot<AvatarProps> {
       new AvatarUpdatedEvent(this.id, {
         name: props.name,
         description: props.description,
+      }),
+    );
+  }
+
+  delete() {
+    this.apply(
+      new AvatarDeletedEvent(this.id, {
+        avatarId: this.id,
       }),
     );
   }
