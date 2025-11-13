@@ -1,0 +1,12 @@
+import { Module } from '@nestjs/common';
+
+import { SoundEffectRepositoryModule } from '@module/sound-effect/repositories/sound-effect/sound-effect.repository.module';
+import { ListSoundEffectsController } from '@module/sound-effect/use-cases/list-sound-effects/list-sound-effects.controller';
+import { ListSoundEffectsHandler } from '@module/sound-effect/use-cases/list-sound-effects/list-sound-effects.handler';
+
+@Module({
+  imports: [SoundEffectRepositoryModule],
+  controllers: [ListSoundEffectsController],
+  providers: [ListSoundEffectsHandler],
+})
+export class ListSoundEffectsModule {}
