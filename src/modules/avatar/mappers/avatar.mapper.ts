@@ -18,7 +18,7 @@ export class AvatarMapper extends BaseMapper {
         contentType: raw.contentType,
         width: raw.width,
         height: raw.height,
-        description: raw.description ?? undefined,
+        description: raw.description ?? null,
         usageCount: raw.usageCount,
       },
     });

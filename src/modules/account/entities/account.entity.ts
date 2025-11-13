@@ -25,16 +25,16 @@ export enum SocialProvider {
 export interface AccountProps {
   role: AccountRole;
   signInType: SignInType;
-  socialProvider?: SocialProvider;
-  socialProviderUid?: string;
-  username?: string;
-  password?: string;
+  socialProvider: SocialProvider | null;
+  socialProviderUid: string | null;
+  username: string | null;
+  password: string | null;
   nickname: string;
   avatarFileName: string;
-  enteredAt?: Date;
-  leftAt?: Date;
+  enteredAt: Date | null;
+  leftAt: Date | null;
   isActive: boolean;
-  lastSignedInAt?: Date;
+  lastSignedInAt: Date | null;
 }
 
 interface CreateAccountWithUsernameProps {
@@ -67,11 +67,16 @@ export class Account extends AggregateRoot<AccountProps> {
       props: {
         role: props.role,
         signInType: props.signInType,
-        username: props.username,
-        password: props.password,
+        socialProvider: null,
+        socialProviderUid: null,
+        username: props.username ?? null,
+        password: props.password ?? null,
         nickname: props.nickname,
         avatarFileName: props.avatarFileName,
         isActive: false,
+        enteredAt: null,
+        leftAt: null,
+        lastSignedInAt: null,
       },
       createdAt: date,
       updatedAt: date,
@@ -101,10 +106,15 @@ export class Account extends AggregateRoot<AccountProps> {
         role: props.role,
         signInType: SignInType.google,
         socialProvider: SocialProvider.google,
-        socialProviderUid: props.socialProviderUid,
+        socialProviderUid: props.socialProviderUid ?? null,
         nickname: props.nickname,
         avatarFileName: props.avatarFileName,
         isActive: false,
+        username: null,
+        password: null,
+        enteredAt: null,
+        leftAt: null,
+        lastSignedInAt: null,
       },
       createdAt: date,
       updatedAt: date,
@@ -134,19 +144,19 @@ export class Account extends AggregateRoot<AccountProps> {
     return this.props.signInType;
   }
 
-  get socialProvider(): SocialProvider | undefined {
+  get socialProvider(): SocialProvider | null {
     return this.props.socialProvider;
   }
 
-  get socialProviderUid(): string | undefined {
+  get socialProviderUid(): string | null {
     return this.props.socialProviderUid;
   }
 
-  get username(): string | undefined {
+  get username(): string | null {
     return this.props.username;
   }
 
-  get password(): string | undefined {
+  get password(): string | null {
     return this.props.password;
   }
 
@@ -158,11 +168,11 @@ export class Account extends AggregateRoot<AccountProps> {
     return this.props.avatarFileName;
   }
 
-  get enteredAt(): Date | undefined {
+  get enteredAt(): Date | null {
     return this.props.enteredAt;
   }
 
-  get leftAt(): Date | undefined {
+  get leftAt(): Date | null {
     return this.props.leftAt;
   }
 

@@ -19,16 +19,16 @@ export class AccountMapper extends BaseMapper {
         signInType: SignInType[raw.signInType],
         socialProvider: raw.socialProvider
           ? SocialProvider[raw.socialProvider]
-          : undefined,
-        socialProviderUid: raw.socialProviderUid ?? undefined,
-        username: raw.username ?? undefined,
-        password: raw.password ?? undefined,
+          : null,
+        socialProviderUid: raw.socialProviderUid ?? null,
+        username: raw.username ?? null,
+        password: raw.password ?? null,
         nickname: raw.nickname,
         avatarFileName: raw.avatarFileName,
-        enteredAt: raw.lastEnteredAt ?? undefined,
-        leftAt: raw.lastLeftAt ?? undefined,
+        enteredAt: raw.lastEnteredAt ?? null,
+        leftAt: raw.lastLeftAt ?? null,
         isActive: raw.isActive,
-        lastSignedInAt: raw.lastSignedInAt ?? undefined,
+        lastSignedInAt: raw.lastSignedInAt ?? null,
       },
     });
   }

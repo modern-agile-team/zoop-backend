@@ -26,6 +26,7 @@ export const AccountFactory = Factory.define<Account & AccountProps>(
     avatarFileName: () => faker.string.nanoid(),
     enteredAt: () => faker.date.past(),
     leftAt: () => faker.date.future(),
+    lastSignedInAt: () => faker.date.recent(),
     isActive: () => faker.datatype.boolean(),
     createdAt: () => new Date(),
     updatedAt: () => new Date(),

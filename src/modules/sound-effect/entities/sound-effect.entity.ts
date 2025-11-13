@@ -16,7 +16,7 @@ export interface SoundEffectProps {
   extension: string;
   contentLength: string;
   contentType: string;
-  description?: string | null;
+  description: string | null;
 }
 
 interface CreateSoundEffectProps {
@@ -51,7 +51,7 @@ export class SoundEffect extends AggregateRoot<SoundEffectProps> {
         extension: props.extension,
         contentLength: props.contentLength,
         contentType: props.contentType,
-        description: props.description,
+        description: props.description ?? null,
       },
       createdAt: date,
       updatedAt: date,
@@ -96,7 +96,7 @@ export class SoundEffect extends AggregateRoot<SoundEffectProps> {
     return this.props.contentLength;
   }
 
-  get description(): string | undefined | null {
+  get description(): string | null {
     return this.props.description;
   }
 

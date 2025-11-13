@@ -52,7 +52,7 @@ describe(EnterAccountHandler.name, () => {
 
     beforeEach(async () => {
       await accountRepository.insert(
-        AccountFactory.build({ id: command.accountId, enteredAt: undefined }),
+        AccountFactory.build({ id: command.accountId, enteredAt: null }),
       );
     });
 
