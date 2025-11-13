@@ -11,5 +11,5 @@ export const UpdateNicknameSourceCommandFactory =
     UpdateNicknameSourceCommand,
   ).attrs({
     nicknameSourceId: () => generateEntityId(),
-    name: () => faker.string.nanoid(1),
+    name: () => faker.string.nanoid(10),
   });
