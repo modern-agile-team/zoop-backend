@@ -12,8 +12,8 @@ export class QuizMapper extends BaseMapper {
       props: {
         type: raw.type,
         answer: raw.answer,
-        question: raw.question ?? undefined,
-        imageFileName: raw.imageFileName ?? undefined,
+        question: raw.question ?? null,
+        imageFileName: raw.imageFileName ?? null,
       },
     });
   }

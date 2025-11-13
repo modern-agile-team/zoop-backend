@@ -10,9 +10,9 @@ import {
 
 export interface QuizProps {
   type: string;
-  question?: string | null;
+  question: string | null;
   answer: string;
-  imageFileName?: string | null;
+  imageFileName: string | null;
 }
 
 interface CreateQuizProps {
@@ -44,9 +44,9 @@ export class Quiz extends AggregateRoot<QuizProps> {
       updatedAt: now,
       props: {
         type: props.type,
-        question: props.question,
+        question: props.question ?? null,
         answer: props.answer,
-        imageFileName: props.imageFileName,
+        imageFileName: props.imageFileName ?? null,
       },
     });
 
@@ -67,7 +67,7 @@ export class Quiz extends AggregateRoot<QuizProps> {
     return this.props.type;
   }
 
-  get question(): string | undefined | null {
+  get question(): string | null {
     return this.props.question;
   }
 
@@ -75,13 +75,10 @@ export class Quiz extends AggregateRoot<QuizProps> {
     return this.props.answer;
   }
 
-  get imageFileName(): string | undefined | null {
+  get imageFileName(): string | null {
     return this.props.imageFileName;
   }
 
-  /**
-   * @todo updatedAt 갱신
-   */
   update(props: UpdateQuizProps) {
     if (props.type !== undefined) {
       this.props.type = props.type;

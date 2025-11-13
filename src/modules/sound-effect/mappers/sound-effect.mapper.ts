@@ -16,7 +16,7 @@ export class SoundEffectMapper extends BaseMapper {
         extension: raw.extension,
         contentLength: raw.contentLength,
         contentType: raw.contentType,
-        description: raw.description ?? undefined,
+        description: raw.description ?? null,
       },
     });
   }

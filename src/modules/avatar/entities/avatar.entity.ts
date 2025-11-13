@@ -19,7 +19,7 @@ export interface AvatarProps {
   contentType: string;
   width: number;
   height: number;
-  description?: string | null;
+  description: string | null;
   usageCount: number;
 }
 
@@ -59,7 +59,7 @@ export class Avatar extends AggregateRoot<AvatarProps> {
         contentType: props.contentType,
         width: props.width,
         height: props.height,
-        description: props.description,
+        description: props.description ?? null,
         usageCount: 0,
       },
       createdAt: date,
@@ -116,7 +116,7 @@ export class Avatar extends AggregateRoot<AvatarProps> {
     return this.props.height;
   }
 
-  get description(): string | undefined | null {
+  get description(): string | null {
     return this.props.description;
   }
 
