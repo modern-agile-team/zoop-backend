@@ -1,6 +1,7 @@
 import { TSID } from 'tsid-ts';
 
 import { SoundEffectCreatedEvent } from '@module/sound-effect/events/sound-effect-created.event';
+import { SoundEffectDeletedEvent } from '@module/sound-effect/events/sound-effect-deleted.event';
 import { SoundEffectUpdatedEvent } from '@module/sound-effect/events/sound-effect-updated.event';
 
 import {
@@ -115,6 +116,14 @@ export class SoundEffect extends AggregateRoot<SoundEffectProps> {
       new SoundEffectUpdatedEvent(this.id, {
         name: props.name,
         description: props.description,
+      }),
+    );
+  }
+
+  delete() {
+    this.apply(
+      new SoundEffectDeletedEvent(this.id, {
+        soundEffectId: this.id,
       }),
     );
   }
