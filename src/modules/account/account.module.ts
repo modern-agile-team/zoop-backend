@@ -10,6 +10,7 @@ import { GetAccountByUsernameModule } from '@module/account/use-cases/get-accoun
 import { GetAccountModule } from '@module/account/use-cases/get-account/get-account.module';
 import { GetActiveAccountCountModule } from '@module/account/use-cases/get-active-account-count/get-active-account-count.module';
 import { ListAccountsModule } from '@module/account/use-cases/list-accounts/list-accounts.module';
+import { UpdateAccountModule } from '@module/account/use-cases/update-account/update-account.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ListAccountsModule } from '@module/account/use-cases/list-accounts/list
     GetAccountByUsernameModule,
     GetActiveAccountCountModule,
     ListAccountsModule,
+    UpdateAccountModule,
 
     AccountEnteredModule,
   ],
