@@ -13,7 +13,7 @@ export const NicknameSourceFactory = Factory.define<
 >(NicknameSource.name)
   .attrs({
     id: () => generateEntityId(),
-    name: () => faker.string.nanoid(5),
+    name: () => faker.string.nanoid(10),
     sequence: () => 1,
     createdAt: () => new Date(),
     updatedAt: () => new Date(),
