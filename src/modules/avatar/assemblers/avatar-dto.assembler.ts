@@ -23,7 +23,7 @@ export class AvatarDtoAssembler {
     dto.contentLength = Number(avatar.contentLength);
     dto.width = avatar.width;
     dto.height = avatar.height;
-    dto.description = avatar.description;
+    dto.description = avatar.description ?? null;
     dto.usageCount = avatar.usageCount;
 
     return dto;

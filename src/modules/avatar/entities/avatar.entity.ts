@@ -1,6 +1,7 @@
 import { TSID } from 'tsid-ts';
 
 import { AvatarCreatedEvent } from '@module/avatar/events/avatar-created.event';
+import { AvatarUpdatedEvent } from '@module/avatar/events/avatar-updated-event';
 
 import {
   AggregateRoot,
@@ -17,7 +18,7 @@ export interface AvatarProps {
   contentType: string;
   width: number;
   height: number;
-  description?: string;
+  description?: string | null;
   usageCount: number;
 }
 
@@ -30,6 +31,11 @@ interface CreateAvatarProps {
   width: number;
   height: number;
   description?: string;
+}
+
+interface UpdateAvatarProps {
+  name?: string;
+  description?: string | null;
 }
 
 export class Avatar extends AggregateRoot<AvatarProps> {
@@ -109,12 +115,31 @@ export class Avatar extends AggregateRoot<AvatarProps> {
     return this.props.height;
   }
 
-  get description(): string | undefined {
+  get description(): string | undefined | null {
     return this.props.description;
   }
 
   get usageCount(): number {
     return this.props.usageCount;
+  }
+
+  update(props: UpdateAvatarProps) {
+    if (props.name !== undefined) {
+      this.props.name = props.name;
+    }
+
+    if (props.description !== undefined) {
+      this.props.description = props.description;
+    }
+
+    this.updatedAt = new Date();
+
+    this.apply(
+      new AvatarUpdatedEvent(this.id, {
+        name: props.name,
+        description: props.description,
+      }),
+    );
   }
 
   public validate(): void {}

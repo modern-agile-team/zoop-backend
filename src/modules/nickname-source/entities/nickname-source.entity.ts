@@ -72,6 +72,8 @@ export class NicknameSource extends AggregateRoot<NicknameSourceProps> {
       this.props.name = props.name;
     }
 
+    this.updatedAt = new Date();
+
     this.apply(
       new NicknameSourceUpdatedEvent(this.id, {
         nicknameSourceId: this.id,
