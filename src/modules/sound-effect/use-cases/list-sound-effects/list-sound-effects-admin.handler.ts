@@ -6,13 +6,13 @@ import {
   SOUND_EFFECT_REPOSITORY,
   SoundEffectRepositoryPort,
 } from '@module/sound-effect/repositories/sound-effect/sound-effect.repository.port';
-import { ListSoundEffectsQuery } from '@module/sound-effect/use-cases/list-sound-effects/list-sound-effects.query';
+import { ListSoundEffectsAdminQuery } from '@module/sound-effect/use-cases/list-sound-effects/list-sound-effects-admin.query';
 
 import { OffsetPage } from '@common/base/base.entity';
 
-@QueryHandler(ListSoundEffectsQuery)
-export class ListSoundEffectsHandler
-  implements IQueryHandler<ListSoundEffectsQuery, OffsetPage<SoundEffect>>
+@QueryHandler(ListSoundEffectsAdminQuery)
+export class ListSoundEffectsAdminHandler
+  implements IQueryHandler<ListSoundEffectsAdminQuery, OffsetPage<SoundEffect>>
 {
   constructor(
     @Inject(SOUND_EFFECT_REPOSITORY)
@@ -20,7 +20,7 @@ export class ListSoundEffectsHandler
   ) {}
 
   async execute(
-    query: ListSoundEffectsQuery,
+    query: ListSoundEffectsAdminQuery,
   ): Promise<OffsetPage<SoundEffect>> {
     const page = query.page ?? 1;
     const perPage = query.perPage ?? 20;

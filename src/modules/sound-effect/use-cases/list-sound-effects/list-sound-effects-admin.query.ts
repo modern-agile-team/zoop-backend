@@ -1,15 +1,15 @@
 import { IQuery } from '@nestjs/cqrs';
 
-export interface IListSoundEffectsQueryProps {
+export interface IListSoundEffectsAdminQueryProps {
   page?: number;
   perPage?: number;
 }
 
-export class ListSoundEffectsQuery implements IQuery {
+export class ListSoundEffectsAdminQuery implements IQuery {
   readonly page?: number;
   readonly perPage?: number;
 
-  constructor(props: IListSoundEffectsQueryProps) {
+  constructor(props: IListSoundEffectsAdminQueryProps) {
     this.page = props.page;
     this.perPage = props.perPage;
   }

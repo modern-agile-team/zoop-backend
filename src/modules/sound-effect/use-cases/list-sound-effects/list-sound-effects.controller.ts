@@ -5,8 +5,8 @@ import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { SoundEffectCollectionDtoAssembler } from '@module/sound-effect/assemblers/sound-effect-collection-dto.assembler';
 import { SoundEffectCollectionAdminDto } from '@module/sound-effect/dto/sound-effect-collection.admin-dto';
 import { SoundEffect } from '@module/sound-effect/entities/sound-effect.entity';
+import { ListSoundEffectsAdminQuery } from '@module/sound-effect/use-cases/list-sound-effects/list-sound-effects-admin.query';
 import { ListSoundEffectsAdminDto } from '@module/sound-effect/use-cases/list-sound-effects/list-sound-effects.admin.dto';
-import { ListSoundEffectsQuery } from '@module/sound-effect/use-cases/list-sound-effects/list-sound-effects.query';
 
 import { OffsetPage } from '@common/base/base.entity';
 import {
@@ -32,13 +32,13 @@ export class ListSoundEffectsController {
   async listSoundEffectsAdmin(
     @Query() dto: ListSoundEffectsAdminDto,
   ): Promise<SoundEffectCollectionAdminDto> {
-    const query = new ListSoundEffectsQuery({
+    const query = new ListSoundEffectsAdminQuery({
       page: dto.page,
       perPage: dto.perPage,
     });
 
     const offsetPage = await this.queryBus.execute<
-      ListSoundEffectsQuery,
+      ListSoundEffectsAdminQuery,
       OffsetPage<SoundEffect>
     >(query);
 
