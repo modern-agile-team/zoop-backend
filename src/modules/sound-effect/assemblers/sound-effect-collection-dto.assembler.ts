@@ -1,10 +1,19 @@
 import { SoundEffectDtoAssembler } from '@module/sound-effect/assemblers/sound-effect-dto.assembler';
 import { SoundEffectCollectionAdminDto } from '@module/sound-effect/dto/sound-effect-collection.admin-dto';
+import { SoundEffectCollectionDto } from '@module/sound-effect/dto/sound-effect-collection.dto';
 import { SoundEffect } from '@module/sound-effect/entities/sound-effect.entity';
 
 import { OffsetPage } from '@common/base/base.entity';
 
 export class SoundEffectCollectionDtoAssembler {
+  static convertToDto(soundEffects: SoundEffect[]): SoundEffectCollectionDto {
+    const dto = new SoundEffectCollectionDto();
+
+    dto.data = soundEffects.map(SoundEffectDtoAssembler.convertToDto);
+
+    return dto;
+  }
+
   static convertToAdminDto(page: OffsetPage<SoundEffect>) {
     const dto = new SoundEffectCollectionAdminDto();
 

@@ -37,6 +37,12 @@ export class SoundEffectRepository
     super(txHost, SoundEffectMapper);
   }
 
+  async findAll(): Promise<SoundEffect[]> {
+    const soundEffects = await this.txHost.tx.soundEffect.findMany({});
+
+    return soundEffects.map((soundEffect) => this.mapper.toEntity(soundEffect));
+  }
+
   async findAllOffsetPaginated(
     params: FindAllSoundEffectsOffsetPaginatedParams,
   ): Promise<IOffsetPaginated<SoundEffect>> {
