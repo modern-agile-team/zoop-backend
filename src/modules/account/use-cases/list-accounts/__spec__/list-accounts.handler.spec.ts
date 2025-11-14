@@ -43,16 +43,16 @@ describe(ListAccountsHandler.name, () => {
     );
   });
   describe('모든 계정 목록을 조회하면', () => {
-    it('계정 목록이 조회돼야한다.', () => {
-      expect(handler.execute({})).resolves.toSatisfyAll<Account>(
+    it('계정 목록이 조회돼야한다.', async () => {
+      await expect(handler.execute({})).resolves.toSatisfyAll<Account>(
         (account) => account instanceof Account,
       );
     });
   });
 
   describe('활성 상태로 필터링된 계정 목록을 조회하면', () => {
-    it('활성 상태로 필터링된 계정 목록이 조회돼야한다.', () => {
-      expect(handler.execute(query)).resolves.toSatisfyAll<Account>(
+    it('활성 상태로 필터링된 계정 목록이 조회돼야한다.', async () => {
+      await expect(handler.execute(query)).resolves.toSatisfyAll<Account>(
         (account) => account.isActive === query.isActive,
       );
     });
