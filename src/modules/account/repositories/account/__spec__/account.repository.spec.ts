@@ -112,6 +112,36 @@ describe(AccountRepository, () => {
     });
   });
 
+  describe(AccountRepository.prototype.findAllOffsetPaginated, () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    let accounts: Account[];
+
+    beforeEach(async () => {
+      accounts = await Promise.all(
+        AccountFactory.buildList(5).map((account) =>
+          repository.insert(account),
+        ),
+      );
+    });
+
+    describe('페이지를 조회하면', () => {
+      it('페이지가 반환되어야한다.', async () => {
+        await expect(
+          repository.findAllOffsetPaginated({
+            pageInfo: { offset: 0, limit: 2 },
+          }),
+        ).resolves.toEqual({
+          data: expect.toSatisfyAll(
+            (account: unknown) => account instanceof Account,
+          ),
+          limit: expect.any(Number),
+          offset: expect.any(Number),
+          totalCount: expect.any(Number),
+        });
+      });
+    });
+  });
+
   describe(AccountRepository.prototype.findOneByUsername, () => {
     let username: string;
 

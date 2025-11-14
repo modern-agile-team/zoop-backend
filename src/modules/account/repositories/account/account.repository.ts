@@ -17,12 +17,14 @@ import {
   AccountOrder,
   AccountRaw,
   AccountRepositoryPort,
+  FindAllAccountsOffsetPaginatedParams,
 } from '@module/account/repositories/account/account.repository.port';
 
 import {
   BaseRepository,
   ICursorPaginated,
   ICursorPaginatedParams,
+  IOffsetPaginated,
 } from '@common/base/base.repository';
 
 @Injectable()
@@ -67,6 +69,35 @@ export class AccountRepository
     });
 
     return accounts.map((account) => this.mapper.toEntity(account));
+  }
+
+  async findAllOffsetPaginated(
+    params: FindAllAccountsOffsetPaginatedParams,
+  ): Promise<IOffsetPaginated<Account>> {
+    const { pageInfo, order, filter } = params;
+
+    const where = {};
+
+    if (filter?.avatarFileName) {
+      Object.assign(where, { avatarFileName: filter.avatarFileName });
+    }
+
+    const [accounts, totalCount] = await Promise.all([
+      this.txHost.tx.account.findMany({
+        skip: pageInfo.offset,
+        take: pageInfo.limit,
+        orderBy: this.toOrderBy(order ?? [{ field: 'id', direction: 'asc' }]),
+        where,
+      }),
+      this.txHost.tx.account.count({}),
+    ]);
+
+    return {
+      offset: pageInfo.offset,
+      limit: pageInfo.limit,
+      totalCount: totalCount,
+      data: accounts.map((account) => this.mapper.toEntity(account)),
+    };
   }
 
   async findOneByUsername(username: string): Promise<Account | undefined> {
