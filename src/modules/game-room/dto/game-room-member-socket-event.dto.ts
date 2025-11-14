@@ -18,4 +18,7 @@ export class GameRoomMemberSocketEventDto {
 
   @ApiProperty()
   nickname: string;
+
+  @ApiProperty()
+  avatarUrl: string;
 }

@@ -2,6 +2,8 @@ import { GameRoomMemberSocketEventDto } from '@module/game-room/dto/game-room-me
 import { GameRoomMemberDto } from '@module/game-room/dto/game-room-member.dto';
 import { GameRoomMember } from '@module/game-room/entities/game-room-member.entity';
 
+import { AssetUrlManager } from '@shared/asset/asset-url.manager';
+
 export class GameRoomMemberDtoAssembler {
   static convertToDto(gameRoomMember: GameRoomMember): GameRoomMemberDto {
     const dto = new GameRoomMemberDto({
@@ -13,6 +15,10 @@ export class GameRoomMemberDtoAssembler {
     dto.accountId = gameRoomMember.accountId;
     dto.role = gameRoomMember.role;
     dto.nickname = gameRoomMember.nickname;
+    dto.avatarUrl = AssetUrlManager.fileNameToUrl(
+      gameRoomMember.avatarFileName,
+      'avatar',
+    );
 
     return dto;
   }
@@ -26,6 +32,10 @@ export class GameRoomMemberDtoAssembler {
     dto.accountId = gameRoomMember.accountId;
     dto.role = gameRoomMember.role;
     dto.nickname = gameRoomMember.nickname;
+    dto.avatarUrl = AssetUrlManager.fileNameToUrl(
+      gameRoomMember.avatarFileName,
+      'avatar',
+    );
 
     return dto;
   }

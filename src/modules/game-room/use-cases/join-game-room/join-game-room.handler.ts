@@ -51,6 +51,7 @@ export class JoinGameRoomHandler
         accountId: command.currentAccountId,
         role: command.role,
         nickname: existingAccount.nickname,
+        avatarFileName: existingAccount.avatarFileName,
       }),
     );
 

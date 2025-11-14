@@ -52,6 +52,7 @@ interface CreateGameRoomProps {
   quizzesCount: number;
   hostAccountId: string;
   hostNickname: string;
+  hostAvatarFileName: string;
 }
 
 export class GameRoom extends AggregateRoot<GameRoomProps> {
@@ -101,6 +102,7 @@ export class GameRoom extends AggregateRoot<GameRoomProps> {
         accountId: props.hostAccountId,
         nickname: props.hostNickname,
         role: GameRoomMemberRole.host,
+        avatarFileName: props.hostAvatarFileName,
       }),
     );
 
@@ -198,6 +200,7 @@ export class GameRoom extends AggregateRoot<GameRoomProps> {
         accountId: member.accountId,
         role: member.role,
         nickname: member.nickname,
+        avatarFileName: member.avatarFileName,
       }),
     );
 

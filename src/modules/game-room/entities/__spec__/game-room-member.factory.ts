@@ -17,6 +17,7 @@ export const GameRoomMemberFactory = Factory.define<
     accountId: () => generateEntityId(),
     role: () => faker.helpers.enumValue(GameRoomMemberRole),
     nickname: () => generateEntityId(),
+    avatarFileName: () => faker.string.nanoid(),
     createdAt: () => new Date(),
     updatedAt: () => new Date(),
   })

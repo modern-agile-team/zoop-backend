@@ -20,4 +20,7 @@ export class GameRoomMemberDto extends BaseResponseDto {
     description: '게임방 구성원의 닉네임(계정 닉네임과 동일함)',
   })
   nickname: string;
+
+  @ApiProperty()
+  avatarUrl: string;
 }
