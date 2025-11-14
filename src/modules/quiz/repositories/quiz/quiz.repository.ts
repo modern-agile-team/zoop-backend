@@ -10,6 +10,7 @@ import { Prisma } from '@prisma/client';
 import { Quiz } from '@module/quiz/entities/quiz.entity';
 import { QuizMapper } from '@module/quiz/mappers/quiz.mapper';
 import {
+  FindAllQuizzesOffsetPaginatedParams,
   QuizFilter,
   QuizOrder,
   QuizRaw,
@@ -20,6 +21,7 @@ import {
   BaseRepository,
   ICursorPaginated,
   ICursorPaginatedParams,
+  IOffsetPaginated,
 } from '@common/base/base.repository';
 
 @Injectable()
@@ -42,18 +44,33 @@ export class QuizRepository
     });
   }
 
-  async findAll(params: { filter: QuizFilter }): Promise<Quiz[]> {
+  async findAllOffsetPaginated(
+    params: FindAllQuizzesOffsetPaginatedParams,
+  ): Promise<IOffsetPaginated<Quiz>> {
+    const { pageInfo, order, filter } = params;
+
     const where: Prisma.QuizWhereInput = {};
 
-    if (params.filter?.imageFileName !== undefined) {
-      where.imageFileName = params.filter.imageFileName;
+    if (filter?.imageFileName !== undefined) {
+      where.imageFileName = filter.imageFileName;
     }
 
-    const quizzes = await this.txHost.tx.quiz.findMany({
-      where,
-    });
+    const [quizzes, totalCount] = await Promise.all([
+      this.txHost.tx.quiz.findMany({
+        skip: pageInfo.offset,
+        take: pageInfo.limit,
+        orderBy: this.toOrderBy(order ?? [{ field: 'id', direction: 'asc' }]),
+        where,
+      }),
+      this.txHost.tx.quiz.count({ where }),
+    ]);
 
-    return quizzes.map((quiz) => this.mapper.toEntity(quiz));
+    return {
+      offset: pageInfo.offset,
+      limit: pageInfo.limit,
+      totalCount: totalCount,
+      data: quizzes.map((quiz) => this.mapper.toEntity(quiz)),
+    };
   }
 
   async findManyByFileNames(fileNames: Set<string>): Promise<Quiz[]> {

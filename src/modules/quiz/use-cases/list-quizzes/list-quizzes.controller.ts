@@ -8,6 +8,7 @@ import { Quiz } from '@module/quiz/entities/quiz.entity';
 import { ListQuizzesDto } from '@module/quiz/use-cases/list-quizzes/list-quizzes.dto';
 import { ListQuizzesQuery } from '@module/quiz/use-cases/list-quizzes/list-quizzes.query';
 
+import { OffsetPage } from '@common/base/base.entity';
 import {
   PermissionDeniedError,
   RequestValidationError,
@@ -35,10 +36,11 @@ export class ListQuizzesController {
       imageFileName: dto.imageFileName,
     });
 
-    const quizzes = await this.queryBus.execute<ListQuizzesQuery, Quiz[]>(
-      query,
-    );
+    const offsetPage = await this.queryBus.execute<
+      ListQuizzesQuery,
+      OffsetPage<Quiz>
+    >(query);
 
-    return QuizCollectionDtoAssembler.convertToAdminDto(quizzes);
+    return QuizCollectionDtoAssembler.convertToAdminDto(offsetPage);
   }
 }

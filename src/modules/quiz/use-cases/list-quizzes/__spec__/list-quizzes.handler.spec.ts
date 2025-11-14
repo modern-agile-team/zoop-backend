@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { QuizFactory } from '@module/quiz/entities/__spec__/quiz.factory';
-import { Quiz } from '@module/quiz/entities/quiz.entity';
 import { QuizRepositoryModule } from '@module/quiz/repositories/quiz/quiz.repository.module';
 import {
   QUIZ_REPOSITORY,
@@ -41,11 +40,15 @@ describe(ListQuizzesHandler.name, () => {
     );
   });
 
-  describe('퀴즈 목록을 조회하면', () => {
-    it('Quiz 인스턴스로 구성된 배열을 반환해야 한다.', async () => {
-      await expect(handler.execute(query)).resolves.toSatisfyAll<Quiz>(
-        (quiz) => quiz instanceof Quiz,
-      );
+  describe('퀴즈 목록 페이지를 조회하면', () => {
+    it('퀴즈 목록 페이지가 반환돼야한다.', async () => {
+      const result = await handler.execute(query);
+
+      expect(result).toBeDefined();
+      expect(result.data.length).toBeGreaterThanOrEqual(0);
+      expect(result.currentPage).toBe(query.page ?? 1);
+      expect(result.perPage).toBe(query.perPage ?? 20);
+      expect(result.totalCount).toBeGreaterThanOrEqual(0);
     });
   });
 });

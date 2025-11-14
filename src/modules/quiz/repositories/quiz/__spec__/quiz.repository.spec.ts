@@ -69,20 +69,27 @@ describe(QuizRepository, () => {
     });
   });
 
-  describe(QuizRepository.prototype.findAll, () => {
+  describe(QuizRepository.prototype.findAllOffsetPaginated, () => {
     let quizzes: Quiz[];
 
     beforeEach(async () => {
       quizzes = await Promise.all(
-        QuizFactory.buildList(3).map((quiz) => repository.insert(quiz)),
+        QuizFactory.buildList(5).map((quiz) => repository.insert(quiz)),
       );
     });
 
-    describe('모든 퀴즈 목록을 조회하면', () => {
-      it('모든 퀴즈 목록을 반환해야 한다.', async () => {
-        await expect(repository.findAll({})).resolves.toEqual(
-          expect.arrayContaining(quizzes),
-        );
+    describe('페이지를 조회하면', () => {
+      it('페이지가 반환되어야한다.', async () => {
+        await expect(
+          repository.findAllOffsetPaginated({
+            pageInfo: { offset: 0, limit: 2 },
+          }),
+        ).resolves.toEqual({
+          data: expect.toSatisfyAll((quiz: unknown) => quiz instanceof Quiz),
+          limit: expect.any(Number),
+          offset: expect.any(Number),
+          totalCount: expect.any(Number),
+        });
       });
     });
 
@@ -95,10 +102,16 @@ describe(QuizRepository, () => {
 
       it('해당 이미지 파일명을 가진 퀴즈 목록을 반환해야 한다.', async () => {
         await expect(
-          repository.findAll({
+          repository.findAllOffsetPaginated({
+            pageInfo: { offset: 0, limit: 2 },
             filter: { imageFileName: targetQuiz.imageFileName as string },
           }),
-        ).resolves.toEqual(expect.arrayContaining([targetQuiz]));
+        ).resolves.toEqual({
+          data: expect.arrayContaining([targetQuiz]),
+          limit: expect.any(Number),
+          offset: expect.any(Number),
+          totalCount: expect.any(Number),
+        });
       });
     });
   });
