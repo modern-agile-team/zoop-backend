@@ -27,6 +27,7 @@ export class ListAccountsController {
   @ApiOperation({ summary: '계정 목록 조회' })
   @ApiErrorResponse({
     [HttpStatus.BAD_REQUEST]: [RequestValidationError],
+    [HttpStatus.UNAUTHORIZED]: [UnauthorizedError],
   })
   @ApiOkResponse({ type: AccountCollectionDto })
   @Get('accounts')
