@@ -61,6 +61,20 @@ export class AvatarRepository
     };
   }
 
+  async findManyByAvatarFileNames(
+    avatarFileNames: Set<string>,
+  ): Promise<Avatar[]> {
+    const avatars = await this.txHost.tx.avatar.findMany({
+      where: {
+        fileName: {
+          in: Array.from(avatarFileNames),
+        },
+      },
+    });
+
+    return avatars.map((avatar) => this.mapper.toEntity(avatar));
+  }
+
   findAllCursorPaginated(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     params: ICursorPaginatedParams<AvatarOrder, AvatarFilter>,

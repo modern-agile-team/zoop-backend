@@ -1,6 +1,7 @@
 import { AccountCreatedEvent } from '@module/account/events/account-created-event/account-created.event';
 import { AccountEnteredEvent } from '@module/account/events/account-entered-event/account-entered.event';
 import { AccountSignedInEvent } from '@module/account/events/account-signed-in-event/account-signed-in.event';
+import { AccountUpdatedEvent } from '@module/account/events/account-updated-event/account-updated.event';
 
 import {
   AggregateRoot,
@@ -51,6 +52,11 @@ interface CreateAccountWithGoogleProps {
   socialProviderUid?: string;
   nickname: string;
   avatarFileName: string;
+}
+
+interface UpdateAccountProps {
+  nickname?: string;
+  avatarFileName?: string;
 }
 
 export class Account extends AggregateRoot<AccountProps> {
@@ -204,5 +210,24 @@ export class Account extends AggregateRoot<AccountProps> {
     this.updatedAt = now;
 
     this.apply(new AccountSignedInEvent(this.id, { signedInAt: now }));
+  }
+
+  update(props: UpdateAccountProps) {
+    if (props.nickname !== undefined) {
+      this.props.nickname = props.nickname;
+    }
+
+    if (props.avatarFileName !== undefined) {
+      this.props.avatarFileName = props.avatarFileName;
+    }
+
+    this.updatedAt = new Date();
+
+    this.apply(
+      new AccountUpdatedEvent(this.id, {
+        nickname: this.props.nickname,
+        avatarFileName: this.props.avatarFileName,
+      }),
+    );
   }
 }

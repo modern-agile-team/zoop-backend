@@ -29,4 +29,5 @@ export interface AvatarRepositoryPort
   findAllOffsetPaginated(
     params: FindAllAvatarsOffsetPaginatedParams,
   ): Promise<IOffsetPaginated<Avatar>>;
+  findManyByAvatarFileNames(avatarFileNames: Set<string>): Promise<Avatar[]>;
 }
