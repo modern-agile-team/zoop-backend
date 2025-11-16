@@ -7,26 +7,28 @@ import {
   SOUND_EFFECT_REPOSITORY,
   SoundEffectRepositoryPort,
 } from '@module/sound-effect/repositories/sound-effect/sound-effect.repository.port';
-import { ListSoundEffectsQueryFactory } from '@module/sound-effect/use-cases/list-sound-effects/__spec__/list-sound-effects-query.factory';
-import { ListSoundEffectsHandler } from '@module/sound-effect/use-cases/list-sound-effects/list-sound-effects.handler';
-import { ListSoundEffectsQuery } from '@module/sound-effect/use-cases/list-sound-effects/list-sound-effects.query';
+import { ListSoundEffectsAdminQueryFactory } from '@module/sound-effect/use-cases/list-sound-effects/__spec__/list-sound-effects-admin-query.factory';
+import { ListSoundEffectsAdminHandler } from '@module/sound-effect/use-cases/list-sound-effects/list-sound-effects-admin.handler';
+import { ListSoundEffectsAdminQuery } from '@module/sound-effect/use-cases/list-sound-effects/list-sound-effects-admin.query';
 
 import { ClsModuleFactory } from '@common/factories/cls-module.factory';
 
-describe(ListSoundEffectsHandler.name, () => {
-  let handler: ListSoundEffectsHandler;
+describe(ListSoundEffectsAdminHandler.name, () => {
+  let handler: ListSoundEffectsAdminHandler;
 
   let soundEffectRepository: SoundEffectRepositoryPort;
 
-  let query: ListSoundEffectsQuery;
+  let query: ListSoundEffectsAdminQuery;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [ClsModuleFactory(), SoundEffectRepositoryModule],
-      providers: [ListSoundEffectsHandler],
+      providers: [ListSoundEffectsAdminHandler],
     }).compile();
 
-    handler = module.get<ListSoundEffectsHandler>(ListSoundEffectsHandler);
+    handler = module.get<ListSoundEffectsAdminHandler>(
+      ListSoundEffectsAdminHandler,
+    );
 
     soundEffectRepository = module.get<SoundEffectRepositoryPort>(
       SOUND_EFFECT_REPOSITORY,
@@ -34,10 +36,10 @@ describe(ListSoundEffectsHandler.name, () => {
   });
 
   beforeEach(() => {
-    query = ListSoundEffectsQueryFactory.build({});
+    query = ListSoundEffectsAdminQueryFactory.build({ page: 1, perPage: 20 });
   });
 
-  describe('효과음 목록을 조회하면', () => {
+  describe('효과음 페이지를 조회하면', () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let soundEffects: SoundEffect[];
 
@@ -50,9 +52,13 @@ describe(ListSoundEffectsHandler.name, () => {
     });
 
     it('효과음 페이지가 반환돼야한다.', async () => {
-      await expect(handler.execute(query)).resolves.toEqual(
-        expect.arrayContaining(soundEffects),
-      );
+      const result = await handler.execute(query);
+
+      expect(result).toBeDefined();
+      expect(result.data.length).toBeGreaterThanOrEqual(5);
+      expect(result.currentPage).toBe(query.page ?? 1);
+      expect(result.perPage).toBe(query.perPage ?? 20);
+      expect(result.totalCount).toBeGreaterThanOrEqual(5);
     });
   });
 });

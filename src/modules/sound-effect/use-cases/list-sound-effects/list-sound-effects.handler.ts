@@ -8,30 +8,19 @@ import {
 } from '@module/sound-effect/repositories/sound-effect/sound-effect.repository.port';
 import { ListSoundEffectsQuery } from '@module/sound-effect/use-cases/list-sound-effects/list-sound-effects.query';
 
-import { OffsetPage } from '@common/base/base.entity';
-
 @QueryHandler(ListSoundEffectsQuery)
 export class ListSoundEffectsHandler
-  implements IQueryHandler<ListSoundEffectsQuery, OffsetPage<SoundEffect>>
+  implements IQueryHandler<ListSoundEffectsQuery, SoundEffect[]>
 {
   constructor(
     @Inject(SOUND_EFFECT_REPOSITORY)
     private readonly soundEffectRepository: SoundEffectRepositoryPort,
   ) {}
 
-  async execute(
-    query: ListSoundEffectsQuery,
-  ): Promise<OffsetPage<SoundEffect>> {
-    const page = query.page ?? 1;
-    const perPage = query.perPage ?? 20;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async execute(query: ListSoundEffectsQuery): Promise<SoundEffect[]> {
+    const soundEffects = this.soundEffectRepository.findAll();
 
-    const result = await this.soundEffectRepository.findAllOffsetPaginated({
-      pageInfo: {
-        offset: (page - 1) * perPage,
-        limit: perPage,
-      },
-    });
-
-    return new OffsetPage(result.data, page, perPage, result.totalCount);
+    return soundEffects;
   }
 }

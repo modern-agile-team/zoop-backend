@@ -21,6 +21,7 @@ export interface FindAllSoundEffectsOffsetPaginatedParams {
 
 export interface SoundEffectRepositoryPort
   extends RepositoryPort<SoundEffect, SoundEffectFilter, SoundEffectOrder> {
+  findAll(): Promise<SoundEffect[]>;
   findAllOffsetPaginated(
     params: FindAllSoundEffectsOffsetPaginatedParams,
   ): Promise<IOffsetPaginated<SoundEffect>>;

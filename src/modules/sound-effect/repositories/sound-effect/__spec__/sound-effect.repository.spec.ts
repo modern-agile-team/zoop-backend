@@ -54,6 +54,26 @@ describe(SoundEffectRepository, () => {
     });
   });
 
+  describe(SoundEffectRepository.prototype.findAll, () => {
+    let soundEffects: SoundEffect[];
+
+    beforeEach(async () => {
+      soundEffects = await Promise.all(
+        SoundEffectFactory.buildList(3).map((soundEffect) =>
+          repository.insert(soundEffect),
+        ),
+      );
+    });
+
+    describe('효과음 목록을 조회하면', () => {
+      it('효과음 목록을 반환돼야하다.', async () => {
+        await expect(repository.findAll()).resolves.toEqual(
+          expect.arrayContaining(soundEffects),
+        );
+      });
+    });
+  });
+
   describe(SoundEffectRepository.prototype.findAllOffsetPaginated, () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let soundEffects: SoundEffect[];
