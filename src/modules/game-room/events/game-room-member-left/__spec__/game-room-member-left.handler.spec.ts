@@ -58,9 +58,7 @@ describe(GameRoomMemberLeftHandler, () => {
   let gameRoom: GameRoom;
 
   beforeEach(async () => {
-    gameRoom = GameRoomFactory.build({
-      currentMembersCount: 1,
-    });
+    gameRoom = GameRoomFactory.build({});
 
     event = new GameRoomMemberLeftEvent(gameRoom.id, {
       gameRoomId: gameRoom.id,

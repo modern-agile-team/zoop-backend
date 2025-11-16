@@ -1,9 +1,22 @@
-import { Factory } from 'rosie';
+import { Factory } from 'fishery';
 
-import { GetActiveAccountCountQuery } from '@module/account/use-cases/get-active-account-count/get-active-account-count.query';
+import {
+  GetActiveAccountCountQuery,
+  IGetActiveAccountCountQueryProps,
+} from '@module/account/use-cases/get-active-account-count/get-active-account-count.query';
 
-export const GetActiveAccountCountQueryFactory =
-  Factory.define<GetActiveAccountCountQuery>(
-    GetActiveAccountCountQuery.name,
-    GetActiveAccountCountQuery,
-  ).attrs({});
+import { createFactoryProps } from '@common/factories/factory-builder.util';
+
+export const GetActiveAccountCountQueryFactory = Factory.define<
+  GetActiveAccountCountQuery,
+  void,
+  GetActiveAccountCountQuery,
+  Partial<IGetActiveAccountCountQueryProps>
+>(({ params }) => {
+  const props = createFactoryProps<IGetActiveAccountCountQueryProps>(
+    {},
+    params,
+  );
+
+  return new GetActiveAccountCountQuery(props);
+});

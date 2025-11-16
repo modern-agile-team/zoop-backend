@@ -1,10 +1,28 @@
-import { Factory } from 'rosie';
+import { Factory } from 'fishery';
 
-import { CreateQuizzesCommand } from '@module/quiz/use-cases/create-quizzes/create-quizzes.command';
-
-export const CreateQuizzesCommandFactory = Factory.define<CreateQuizzesCommand>(
-  CreateQuizzesCommand.name,
+import {
   CreateQuizzesCommand,
-).attrs({
-  props: () => [],
+  ICreateQuizzesCommandProps,
+} from '@module/quiz/use-cases/create-quizzes/create-quizzes.command';
+
+import { createFactoryProps } from '@common/factories/factory-builder.util';
+
+type CreateQuizzesCommandFactoryProps = {
+  props: ICreateQuizzesCommandProps[];
+};
+
+export const CreateQuizzesCommandFactory = Factory.define<
+  CreateQuizzesCommand,
+  void,
+  CreateQuizzesCommand,
+  Partial<CreateQuizzesCommandFactoryProps>
+>(({ params }) => {
+  const { props } = createFactoryProps<CreateQuizzesCommandFactoryProps>(
+    {
+      props: [],
+    },
+    params,
+  );
+
+  return new CreateQuizzesCommand(props);
 });

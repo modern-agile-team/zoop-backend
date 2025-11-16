@@ -2,7 +2,7 @@ import { IQuery } from '@nestjs/cqrs';
 
 import { SocialProvider } from '@module/account/entities/account.entity';
 
-interface IGetAccountBySocialIdQueryProps {
+export interface IGetAccountBySocialIdQueryProps {
   provider: SocialProvider;
   providerUid: string;
 }

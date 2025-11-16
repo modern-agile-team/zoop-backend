@@ -1,12 +1,25 @@
-import { Factory } from 'rosie';
+import { Factory } from 'fishery';
 
-import { DeleteQuizCommand } from '@module/quiz/use-cases/delete-quiz/delete-quiz.command';
+import {
+  DeleteQuizCommand,
+  IDeleteQuizCommandProps,
+} from '@module/quiz/use-cases/delete-quiz/delete-quiz.command';
 
 import { generateEntityId } from '@common/base/base.entity';
+import { createFactoryProps } from '@common/factories/factory-builder.util';
 
-export const DeleteQuizCommandFactory = Factory.define<DeleteQuizCommand>(
-  DeleteQuizCommand.name,
+export const DeleteQuizCommandFactory = Factory.define<
   DeleteQuizCommand,
-).attrs({
-  quizId: () => generateEntityId(),
+  void,
+  DeleteQuizCommand,
+  Partial<IDeleteQuizCommandProps>
+>(({ params }) => {
+  const props = createFactoryProps<IDeleteQuizCommandProps>(
+    {
+      quizId: generateEntityId(),
+    },
+    params,
+  );
+
+  return new DeleteQuizCommand(props);
 });
