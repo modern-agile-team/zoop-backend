@@ -63,7 +63,9 @@ describe(GameRoom, () => {
   describe(GameRoom.prototype.start, () => {
     describe('게임방이 대기 상태라면', () => {
       beforeEach(() => {
-        gameRoom.props.status = GameRoomStatus.waiting;
+        gameRoom = GameRoomFactory.build({
+          status: GameRoomStatus.waiting,
+        });
       });
 
       it('시작중으로 상태를 변경해야한다.', () => {
@@ -74,7 +76,9 @@ describe(GameRoom, () => {
 
     describe('게임방이 대기 상태가 아니라면', () => {
       beforeEach(() => {
-        gameRoom.props.status = GameRoomStatus.paused;
+        gameRoom = GameRoomFactory.build({
+          status: GameRoomStatus.paused,
+        });
       });
 
       it('게임 시작은 대기 상태에서만 가능하다는 에러가 발생해야한다.', () => {

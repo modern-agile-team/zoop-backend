@@ -133,6 +133,10 @@ export class GameRoom extends AggregateRoot<GameRoomProps> {
     return this.props.members.length;
   }
 
+  get quizTimeLimitInSeconds(): number {
+    return this.props.quizTimeLimitInSeconds;
+  }
+
   get quizzesCount(): number {
     return this.props.quizzesCount;
   }

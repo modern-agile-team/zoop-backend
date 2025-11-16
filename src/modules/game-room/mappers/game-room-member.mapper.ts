@@ -26,9 +26,9 @@ export class GameRoomMemberMapper extends BaseMapper {
       id: this.toPrimaryKey(entity.id),
       createdAt: entity.createdAt.toISOString(),
       updatedAt: entity.updatedAt.toISOString(),
-      accountId: this.toPrimaryKey(entity.props.accountId),
-      role: entity.props.role as PrismaJson.GameRoomMemberRole,
-      nickname: entity.props.nickname,
+      accountId: this.toPrimaryKey(entity.accountId),
+      role: entity.role as PrismaJson.GameRoomMemberRole,
+      nickname: entity.nickname,
       avatarFileName: entity.avatarFileName,
     };
   }
