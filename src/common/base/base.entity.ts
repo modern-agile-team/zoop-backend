@@ -59,7 +59,7 @@ export abstract class BaseEntity<T> {
     return this._id;
   }
 
-  get props(): T {
+  protected get props(): T {
     return this._props;
   }
 
@@ -73,6 +73,15 @@ export abstract class BaseEntity<T> {
 
   set updatedAt(value: Date) {
     this._updatedAt = value;
+  }
+
+  getProps() {
+    return {
+      id: this.id,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+      ...this.props,
+    };
   }
 
   public abstract validate(): void;
@@ -106,7 +115,7 @@ export abstract class AggregateRoot<T> extends NestAggregateRoot<DomainEvent> {
     return this._id;
   }
 
-  get props(): T {
+  protected get props(): T {
     return this._props;
   }
 
@@ -120,6 +129,15 @@ export abstract class AggregateRoot<T> extends NestAggregateRoot<DomainEvent> {
 
   set updatedAt(value: Date) {
     this._updatedAt = value;
+  }
+
+  getProps() {
+    return {
+      id: this.id,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+      ...this.props,
+    };
   }
 
   public abstract validate(): void;

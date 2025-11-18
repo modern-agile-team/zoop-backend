@@ -160,28 +160,37 @@ export class DomainName extends BaseEntity<DomainNameProps> {
 `;
 
   const FACTORY_PRESET = `
-import { faker } from '@faker-js/faker';
-import { Factory } from 'rosie';
+import { Factory } from 'fishery';
 
 import {
   DomainName,
   DomainNameProps,
 } from '@module/dir-name/entities/domain-name.entity';
 
-import { generateEntityId } from '@common/base/base.entity';
+import {
+  BaseEntityProps,
+  generateEntityId,
+} from '@common/base/base.entity';
+import { createFactoryProps } from '@common/factories/factory-builder.util';
 
-export const DomainNameFactory = Factory.define<DomainName & DomainNameProps>(
-  DomainName.name,
-)
-  .attrs({
-    id: () => generateEntityId(),
-    createdAt: () => new Date(),
-    updatedAt: () => new Date(),
-  })
-  .after(
-    ({ id, createdAt, updatedAt, ...props }) =>
-      new DomainName({ id, createdAt, updatedAt, props }),
-  );
+type DomainNameFactoryAttributes = DomainNameProps & BaseEntityProps;
+
+export const DomainNameFactory = Factory.define<
+  DomainName,
+  void,
+  DomainName,
+  Partial<DomainNameFactoryAttributes>
+>(({ params }) => {
+  const attributes = createFactoryProps<DomainNameFactoryAttributes>({
+    id: generateEntityId(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  }, params);
+
+  const { id, createdAt, updatedAt, ...props } = attributes;
+
+  return new DomainName({ id, createdAt, updatedAt, props });
+});
 `;
 
   generateFile(

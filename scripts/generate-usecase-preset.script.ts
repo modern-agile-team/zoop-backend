@@ -101,14 +101,28 @@ export class UseCaseNameOperationName implements IOperationName {
 }
 `,
 
-  FACTORY_OPERATION_PRESET: `import { Factory } from 'rosie';
+  FACTORY_OPERATION_PRESET: `import { Factory } from 'fishery';
 
-import { UseCaseNameOperationName } from '@module/module-name/use-cases/use-case-name/use-case-name.operation-name';
-
-export const UseCaseNameOperationNameFactory = Factory.define<UseCaseNameOperationName>(
-  UseCaseNameOperationName.name,
+import {
+  IUseCaseNameOperationNameProps,
   UseCaseNameOperationName,
-).attrs({});
+} from '@module/module-name/use-cases/use-case-name/use-case-name.operation-name';
+
+import { createFactoryProps } from '@common/factories/factory-builder.util';
+
+export const UseCaseNameOperationNameFactory = Factory.define<
+  UseCaseNameOperationName,
+  void,
+  UseCaseNameOperationName,
+  Partial<IUseCaseNameOperationNameProps>
+>(({ params }) => {
+  const props = createFactoryProps<IUseCaseNameOperationNameProps>(
+    {},
+    params,
+  );
+
+  return new UseCaseNameOperationName(props);
+});
 `,
 
   DTO_PRESET: `export class UseCaseNameDto {}

@@ -1,12 +1,25 @@
-import { Factory } from 'rosie';
+import { Factory } from 'fishery';
 
-import { GetAvatarQuery } from '@module/avatar/use-cases/get-avatar/get-avatar.query';
+import {
+  GetAvatarQuery,
+  IGetAvatarQueryProps,
+} from '@module/avatar/use-cases/get-avatar/get-avatar.query';
 
 import { generateEntityId } from '@common/base/base.entity';
+import { createFactoryProps } from '@common/factories/factory-builder.util';
 
-export const GetAvatarQueryFactory = Factory.define<GetAvatarQuery>(
-  GetAvatarQuery.name,
+export const GetAvatarQueryFactory = Factory.define<
   GetAvatarQuery,
-).attrs({
-  avatarId: () => generateEntityId(),
+  void,
+  GetAvatarQuery,
+  Partial<IGetAvatarQueryProps>
+>(({ params }) => {
+  const props = createFactoryProps<IGetAvatarQueryProps>(
+    {
+      avatarId: generateEntityId(),
+    },
+    params,
+  );
+
+  return new GetAvatarQuery(props);
 });

@@ -1,14 +1,26 @@
 import { faker } from '@faker-js/faker';
-import { Factory } from 'rosie';
+import { Factory } from 'fishery';
 
-import { SignInType } from '@module/account/entities/account.entity';
-import { SignUpWithUsernameCommand } from '@module/auth/use-cases/sign-up-with-username/sign-up-with-username.command';
+import {
+  ISignUpWithUsernameCommandProps,
+  SignUpWithUsernameCommand,
+} from '@module/auth/use-cases/sign-up-with-username/sign-up-with-username.command';
 
-export const SignUpWithUsernameCommandFactory =
-  Factory.define<SignUpWithUsernameCommand>(
-    SignUpWithUsernameCommand.name,
-  ).attrs({
-    username: () => faker.string.nanoid(10),
-    password: () => faker.string.uuid(),
-    signInType: SignInType.username,
-  });
+import { createFactoryProps } from '@common/factories/factory-builder.util';
+
+export const SignUpWithUsernameCommandFactory = Factory.define<
+  SignUpWithUsernameCommand,
+  void,
+  SignUpWithUsernameCommand,
+  Partial<ISignUpWithUsernameCommandProps>
+>(({ params }) => {
+  const props = createFactoryProps<ISignUpWithUsernameCommandProps>(
+    {
+      username: faker.string.nanoid(10),
+      password: faker.string.uuid(),
+    },
+    params,
+  );
+
+  return new SignUpWithUsernameCommand(props);
+});

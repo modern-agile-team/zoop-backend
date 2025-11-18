@@ -186,6 +186,10 @@ export class Account extends AggregateRoot<AccountProps> {
     return this.props.isActive;
   }
 
+  get lastSignedInAt(): Date | null {
+    return this.props.lastSignedInAt;
+  }
+
   enter() {
     const now = new Date();
 

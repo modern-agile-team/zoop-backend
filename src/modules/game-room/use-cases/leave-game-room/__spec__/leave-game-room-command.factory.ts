@@ -1,13 +1,26 @@
-import { Factory } from 'rosie';
+import { Factory } from 'fishery';
 
-import { LeaveGameRoomCommand } from '@module/game-room/use-cases/leave-game-room/leave-game-room.command';
+import {
+  ILeaveGameRoomCommandProps,
+  LeaveGameRoomCommand,
+} from '@module/game-room/use-cases/leave-game-room/leave-game-room.command';
 
 import { generateEntityId } from '@common/base/base.entity';
+import { createFactoryProps } from '@common/factories/factory-builder.util';
 
-export const LeaveGameRoomCommandFactory = Factory.define<LeaveGameRoomCommand>(
-  LeaveGameRoomCommand.name,
+export const LeaveGameRoomCommandFactory = Factory.define<
   LeaveGameRoomCommand,
-).attrs({
-  currentAccountId: () => generateEntityId(),
-  gameRoomId: () => generateEntityId(),
+  void,
+  LeaveGameRoomCommand,
+  Partial<ILeaveGameRoomCommandProps>
+>(({ params }) => {
+  const props = createFactoryProps<ILeaveGameRoomCommandProps>(
+    {
+      currentAccountId: generateEntityId(),
+      gameRoomId: generateEntityId(),
+    },
+    params,
+  );
+
+  return new LeaveGameRoomCommand(props);
 });

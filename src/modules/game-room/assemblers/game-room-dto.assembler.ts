@@ -11,12 +11,12 @@ export class GameRoomDtoAssembler {
       updatedAt: gameRoom.updatedAt,
     });
 
-    dto.hostId = gameRoom.props.hostAccountId;
-    dto.status = gameRoom.props.status;
-    dto.title = gameRoom.props.title;
-    dto.maxMembersCount = gameRoom.props.maxMembersCount;
+    dto.hostId = gameRoom.hostAccountId;
+    dto.status = gameRoom.status;
+    dto.title = gameRoom.title;
+    dto.maxMembersCount = gameRoom.maxMembersCount;
     dto.currentMembersCount = gameRoom.currentMembersCount;
-    dto.quizTimeLimitInSeconds = gameRoom.props.quizTimeLimitInSeconds;
+    dto.quizTimeLimitInSeconds = gameRoom.quizTimeLimitInSeconds;
     dto.quizzesCount = gameRoom.quizzesCount;
     dto.members = gameRoom.members.map((member) =>
       GameRoomMemberDtoAssembler.convertToDto(member),
@@ -34,7 +34,7 @@ export class GameRoomDtoAssembler {
     dto.title = gameRoom.title;
     dto.maxPlayers = gameRoom.maxMembersCount;
     dto.currentMembersCount = gameRoom.currentMembersCount;
-    dto.quizTimeLimitInSeconds = gameRoom.props.quizTimeLimitInSeconds;
+    dto.quizTimeLimitInSeconds = gameRoom.quizTimeLimitInSeconds;
     dto.quizzesCount = gameRoom.quizzesCount;
     dto.members = gameRoom.members.map((member) =>
       GameRoomMemberDtoAssembler.convertToSocketEventDto(member),
