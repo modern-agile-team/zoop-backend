@@ -25,6 +25,7 @@ export const MOCK_ENV: Record<keyof typeof ENV_KEY, unknown> = {
   AWS_S3_QUIZ_IMAGE_FILE_PATH: 'quiz-images',
   AWS_S3_SOUND_EFFECT_FILE_PATH: 'sound-effects',
   AWS_S3_AVATAR_FILE_PATH: 'avatars',
+  AWS_S3_BACKGROUND_MUSIC_FILE_PATH: 'background-music',
 
   OAUTH_ALLOW_REDIRECT_URLS: 'http://localhost:3000',
   OAUTH_DEFAULT_REDIRECT_URL: 'http://localhost:3000',

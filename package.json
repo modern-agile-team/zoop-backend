@@ -48,6 +48,7 @@
     "ioredis": "^5.7.0",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
+    "music-metadata": "^6.4.0",
     "nestjs-asyncapi": "^1.4.0",
     "nestjs-cls": "^6.0.1",
     "nestjs-form-data": "^1.9.93",
