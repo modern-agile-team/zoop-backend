@@ -31,11 +31,15 @@ export class AccountAdminDto extends BaseResponseDto {
 
   @ApiProperty({
     description: '진입 시점',
+    type: String,
     nullable: true,
   })
   enteredAt: Date | null;
 
-  @ApiProperty({ nullable: true })
+  @ApiProperty({
+    type: String,
+    nullable: true,
+  })
   leftAt: Date | null;
 
   @ApiProperty()
