@@ -27,6 +27,7 @@ export class BaseResponseDto {
 
 export abstract class BaseCursorPaginationResponseDto<T> {
   @ApiProperty({
+    type: String,
     nullable: true,
   })
   cursor: string | null;

@@ -30,7 +30,10 @@ export class AvatarAdminDto extends BaseResponseDto {
   @ApiProperty()
   height: number;
 
-  @ApiProperty({ nullable: true })
+  @ApiProperty({
+    type: String,
+    nullable: true,
+  })
   description: string | null;
 
   @ApiProperty()
