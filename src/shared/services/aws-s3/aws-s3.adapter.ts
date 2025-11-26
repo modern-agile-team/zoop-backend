@@ -39,6 +39,9 @@ export class AwsS3Adapter implements AwsS3Port {
       avatar: this.appConfigService.get<string>(
         ENV_KEY.AWS_S3_AVATAR_FILE_PATH,
       ),
+      backgroundMusic: this.appConfigService.get<string>(
+        ENV_KEY.AWS_S3_BACKGROUND_MUSIC_FILE_PATH,
+      ),
     };
   }
 

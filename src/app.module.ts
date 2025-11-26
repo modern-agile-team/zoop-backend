@@ -8,6 +8,7 @@ import { AppGateway } from 'src/app.gateway';
 import { AccountModule } from '@module/account/account.module';
 import { AuthModule } from '@module/auth/auth.module';
 import { AvatarModule } from '@module/avatar/avatar.module';
+import { BackgroundMusicModule } from '@module/background-music/background-music.module';
 import { GameRoomModule } from '@module/game-room/game-room.module';
 import { NicknameSourceModule } from '@module/nickname-source/nickname-source.module';
 import { QuizImageModule } from '@module/quiz-image/quiz-image.module';
@@ -40,6 +41,7 @@ import { AccountSocketIndexStoreModule } from '@core/socket/index-store/account-
     QuizModule,
     QuizImageModule,
     SoundEffectModule,
+    BackgroundMusicModule,
   ],
   providers: [AppGateway],
 })
