@@ -55,4 +55,35 @@ describe(BackgroundMusicRepository, () => {
       });
     });
   });
+
+  describe(BackgroundMusicRepository.prototype.findAllOffsetPaginated, () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    let backgroundMusics: BackgroundMusic[];
+
+    beforeEach(async () => {
+      backgroundMusics = await Promise.all(
+        BackgroundMusicFactory.buildList(5).map((backgroundMusic) =>
+          repository.insert(backgroundMusic),
+        ),
+      );
+    });
+
+    describe('페이지를 조회하면', () => {
+      it('페이지가 반환되어야한다.', async () => {
+        await expect(
+          repository.findAllOffsetPaginated({
+            pageInfo: { offset: 0, limit: 2 },
+          }),
+        ).resolves.toEqual({
+          data: expect.toSatisfyAll(
+            (backgroundMusic: unknown) =>
+              backgroundMusic instanceof BackgroundMusic,
+          ),
+          limit: expect.any(Number),
+          offset: expect.any(Number),
+          totalCount: expect.any(Number),
+        });
+      });
+    });
+  });
 });
