@@ -13,12 +13,14 @@ import {
   BackgroundMusicOrder,
   BackgroundMusicRaw,
   BackgroundMusicRepositoryPort,
+  FindAllBackgroundMusicsOffsetPaginatedParams,
 } from '@module/background-music/repositories/background-music/background-music.repository.port';
 
 import {
   BaseRepository,
   ICursorPaginated,
   ICursorPaginatedParams,
+  IOffsetPaginated,
 } from '@common/base/base.repository';
 
 @Injectable()
@@ -33,6 +35,30 @@ export class BackgroundMusicRepository
     protected readonly txHost: TransactionHost<TransactionalAdapterPrisma>,
   ) {
     super(txHost, BackgroundMusicMapper);
+  }
+
+  async findAllOffsetPaginated(
+    params: FindAllBackgroundMusicsOffsetPaginatedParams,
+  ): Promise<IOffsetPaginated<BackgroundMusic>> {
+    const { pageInfo } = params;
+
+    const [backgroundMusics, totalCount] = await Promise.all([
+      this.txHost.tx.backgroundMusic.findMany({
+        skip: pageInfo.offset,
+        take: pageInfo.limit,
+        orderBy: this.toOrderBy([{ field: 'id', direction: 'asc' }]),
+      }),
+      this.txHost.tx.backgroundMusic.count({}),
+    ]);
+
+    return {
+      offset: pageInfo.offset,
+      limit: pageInfo.limit,
+      totalCount: totalCount,
+      data: backgroundMusics.map((backgroundMusic) =>
+        BackgroundMusicMapper.toEntity(backgroundMusic),
+      ),
+    };
   }
 
   findAllCursorPaginated(
